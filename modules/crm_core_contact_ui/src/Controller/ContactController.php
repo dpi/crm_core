@@ -29,8 +29,8 @@ class ContactController extends ControllerBase {
     $content = array();
 
     // Only use node types the user has access to.
-    foreach ($this->entityManager()->getStorage('crm_core_contact_type')->loadMultiple() as $type) {
-      if ($this->entityManager()->getAccessControlHandler('crm_core_contact')->createAccess($type->type)) {
+    foreach ($this->entityTypeManager()->getStorage('crm_core_contact_type')->loadMultiple() as $type) {
+      if ($this->entityTypeManager()->getAccessControlHandler('crm_core_contact')->createAccess($type->type)) {
         $content[$type->type] = $type;
       }
     }
@@ -59,7 +59,7 @@ class ContactController extends ControllerBase {
   public function add(ContactType $crm_core_contact_type) {
     $account = $this->currentUser();
 
-    $contact = $this->entityManager()->getStorage('crm_core_contact')->create(array(
+    $contact = $this->entityTypeManager()->getStorage('crm_core_contact')->create(array(
       'uid' => $account->id(),
       'type' => $crm_core_contact_type->type,
     ));

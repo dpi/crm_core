@@ -90,5 +90,5 @@ function _crm_core_activity_resource_update($activity_id, $activity_data) {
  * Callback for the 'delete' method.
  */
 function _crm_core_activity_resource_delete($activity_id) {
-  return \Drupal::entityManager()->getStorage('crm_core_activity')->delete(array($activity_id));
+  return \Drupal::entityTypeManager()->getStorage('crm_core_activity')->delete(array($activity_id));
 }

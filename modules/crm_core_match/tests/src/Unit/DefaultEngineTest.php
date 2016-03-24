@@ -21,7 +21,7 @@ class DefaultEngineTest extends UnitTestCase {
   /**
    * The mocked match field plugin manager.
    *
-   * @var \Drupal\Core\Entity\EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface|\PHPUnit_Framework_MockObject_MockObject
    */
   protected $pluginManager;
 
@@ -29,9 +29,16 @@ class DefaultEngineTest extends UnitTestCase {
   /**
    * The mocked entity manager service.
    *
-   * @var \Drupal\Core\Entity\EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface|\PHPUnit_Framework_MockObject_MockObject
    */
-  protected $entityManager;
+  protected $entityTypeManager;
+
+  /**
+   * The entity field manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  protected $entityFieldManager;
 
   /**
    * A mocked contact entity used to get matches.
@@ -72,9 +79,13 @@ class DefaultEngineTest extends UnitTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    $this->pluginManager = $this->getMock('\Drupal\Core\Entity\EntityManagerInterface');
+    $this->pluginManager = $this->getMock('\Drupal\Core\Entity\EntityTypeManagerInterface');
 
-    $this->entityManager = $this->getMockBuilder('\Drupal\Core\Entity\EntityManagerInterface')
+    $this->entityTypeManager = $this->getMockBuilder('\Drupal\Core\Entity\EntityTypeManagerInterface')
+      ->disableOriginalConstructor()
+      ->getMock();
+
+    $this->entityFieldManager = $this->getMockBuilder('\Drupal\Core\Entity\EntityFieldManagerInterface')
       ->disableOriginalConstructor()
       ->getMock();
 
@@ -98,7 +109,7 @@ class DefaultEngineTest extends UnitTestCase {
       ->with('dogs')
       ->will($this->returnValue($this->matcher));
 
-    $this->entityManager->expects($this->any())
+    $this->entityTypeManager->expects($this->any())
       ->method('getStorage')
       ->will($this->returnValue($storage));
 
@@ -112,7 +123,7 @@ class DefaultEngineTest extends UnitTestCase {
     $this->engine = new DefaultMatchingEngine([
       'rules' => ['foo' => [], 'bar' => []],
       'threshold' => 50,
-    ], 'default', array(), $this->pluginManager, $this->entityManager);
+    ], 'default', array(), $this->pluginManager, $this->entityTypeManager, $this->entityFieldManager);
   }
 
   /**

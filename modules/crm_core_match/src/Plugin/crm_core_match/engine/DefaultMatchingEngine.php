@@ -8,7 +8,8 @@
 namespace Drupal\crm_core_match\Plugin\crm_core_match\engine;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\crm_core_contact\ContactInterface;
 use Drupal\crm_core_match\Plugin\crm_core_match\field\FieldHandlerInterface;
@@ -40,17 +41,25 @@ class DefaultMatchingEngine extends MatchEngineBase {
   /**
    * The entity manager service.
    *
-   * @var \Drupal\Core\Entity\EntityManagerInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityManager;
+  protected $entityTypeManager;
+
+  /**
+   * The entity field manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  protected $entityFieldManager;
 
   /**
    * Constructs a default matching engine.
    */
-  public function __construct($configuration, $id, $definition, PluginManagerInterface $plugin_manager, EntityManagerInterface $entity_manager) {
+  public function __construct($configuration, $id, $definition, PluginManagerInterface $plugin_manager, EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager) {
     parent::__construct($configuration, $id, $definition);
     $this->pluginManager = $plugin_manager;
-    $this->entityManager = $entity_manager;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->entityFieldManager = $entity_field_manager;
   }
 
   /**
@@ -62,7 +71,8 @@ class DefaultMatchingEngine extends MatchEngineBase {
       $plugin_id,
       $plugin_definition,
       $container->get('plugin.manager.crm_core_match.match_field'),
-      $container->get('entity.manager')
+      $container->get('entity_type.manager'),
+      $container->get('entity_field.manager')
     );
   }
 
@@ -176,10 +186,10 @@ EOF
     );
 
     // @todo: Display fields per bundle.
-    $contact_types = $this->entityManager->getStorage('crm_core_contact_type')->loadMultiple();
+    $contact_types = $this->entityTypeManager->getStorage('crm_core_contact_type')->loadMultiple();
     $fields = [];
     foreach ($contact_types as $contact_type_id => $value) {
-      $fields += $this->entityManager->getFieldDefinitions('crm_core_contact', $contact_type_id);
+      $fields += $this->entityFieldManager->getFieldDefinitions('crm_core_contact', $contact_type_id);
     }
     foreach ($fields as $field) {
 
@@ -361,10 +371,10 @@ EOF
     $rules = [];
 
     // Collect all fields of all contact types.
-    $contact_types = $this->entityManager->getStorage('crm_core_contact_type')->loadMultiple();
+    $contact_types = $this->entityTypeManager->getStorage('crm_core_contact_type')->loadMultiple();
     $field_definitions = [];
     foreach ($contact_types as $contact_type_id => $value) {
-      $field_definitions += $this->entityManager->getFieldDefinitions('crm_core_contact', $contact_type_id);
+      $field_definitions += $this->entityFieldManager->getFieldDefinitions('crm_core_contact', $contact_type_id);
     }
 
     foreach ($this->getConfigurationItem('rules') as $field_name => $field_settings) {

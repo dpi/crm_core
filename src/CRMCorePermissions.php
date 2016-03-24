@@ -29,7 +29,7 @@ class CRMCorePermissions {
    */
   public function entityTypePermissions($entity_type) {
 
-    $entity_info = \Drupal::entityManager()->getDefinition($entity_type);
+    $entity_info = \Drupal::EntityTypeManager()->getDefinition($entity_type);
     $labels = $this->permissionLabels($entity_info);
 
     $permissions = array();
@@ -66,7 +66,7 @@ class CRMCorePermissions {
 
     // Per-bundle create and edit permissions.
     if ($entity_info->hasKey('bundle')) {
-      $bundles = \Drupal::entityManager()->getBundleInfo($entity_type);
+      $bundles = \Drupal::service('entity_type.bundle.info')->getBundleInfo($entity_type);
       foreach ($bundles as $bundle_name => $bundle_info) {
         $permissions += $this->bundlePermissions($bundle_name, $bundle_info, $entity_info);
       }

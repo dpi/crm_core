@@ -133,7 +133,7 @@ class ContactType extends ConfigEntityBundleBase {
 
     if (!empty($results)) {
       $contacts = Contact::loadMultiple($results);
-      \Drupal::entityManager()->getStorage('crm_core_contact')->delete($contacts);
+      \Drupal::entityTypeManager()->getStorage('crm_core_contact')->delete($contacts);
       watchdog('crm_core_contact', 'Delete !count contacts due to deletion of contact type.', array('!count' => count($results)), WATCHDOG_INFO);
     }
   }

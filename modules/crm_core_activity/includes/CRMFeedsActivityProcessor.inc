@@ -78,7 +78,7 @@ class CRMFeedsActivityProcessor extends FeedsProcessor {
    * Delete a series of activities.
    */
   protected function entityDeleteMultiple($activity_ids) {
-    \Drupal::entityManager()->getStorage('crm_core_activity')->delete($activity_ids);
+    \Drupal::entityTypeManager()->getStorage('crm_core_activity')->delete($activity_ids);
   }
 
   /**

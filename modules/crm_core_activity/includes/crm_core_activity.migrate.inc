@@ -58,7 +58,7 @@ class MigrateDestinationCRMCoreActivity extends MigrateDestinationEntity {
   public function bulkRollback(array $activity_ids) {
     migrate_instrument_start('crm_core_activity_delete_multiple');
     $this->prepareRollback($activity_ids);
-    \Drupal::entityManager()->getStorage('crm_core_activity')->delete($activity_ids);
+    \Drupal::entityTypeManager()->getStorage('crm_core_activity')->delete($activity_ids);
     $this->completeRollback($activity_ids);
     migrate_instrument_stop('crm_core_activity_delete_multiple');
   }

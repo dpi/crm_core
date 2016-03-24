@@ -308,7 +308,7 @@ function crm_core_contact_load_multiple($contact_ids = array(), $conditions = ar
  *   TRUE or throw exception and write it to watchdog.
  */
 function crm_core_contact_delete_multiple($contact_ids = array()) {
-  \Drupal::entityManager()->getStorage('crm_core_contact')->delete($contact_ids);
+  \Drupal::entityTypeManager()->getStorage('crm_core_contact')->delete($contact_ids);
   return TRUE;
 }
 

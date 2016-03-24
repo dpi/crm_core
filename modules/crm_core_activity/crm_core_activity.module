@@ -126,7 +126,7 @@ function crm_core_activity_crm_core_contact_delete($crm_core_contact) {
         '!count' => count($activities_to_remove),
         '%contact_id' => $crm_core_contact->contact_id,
       ), WATCHDOG_INFO);
-    \Drupal::entityManager()->getStorage('crm_core_activity')->delete($activities_to_remove);
+    \Drupal::entityTypeManager()->getStorage('crm_core_activity')->delete($activities_to_remove);
   }
 }
 

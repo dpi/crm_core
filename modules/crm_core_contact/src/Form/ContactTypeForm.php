@@ -71,7 +71,7 @@ class ContactTypeForm extends EntityForm {
     $options = array();
     if (isset($type->type)) {
       /* @var \Drupal\Core\Field\FieldDefinitionInterface[] $instances */
-      $instances = \Drupal::entityManager()->getFieldDefinitions('crm_core_contact', $type->type);
+      $instances = \Drupal::service('entity_field.manager')->getFieldDefinitions('crm_core_contact', $type->type);
       $instances = isset($instances[$type->type]) ? $instances[$type->type] : array();
       foreach ($instances as $instance) {
         $options[$instance->getName()] = $instance->getLabel();
