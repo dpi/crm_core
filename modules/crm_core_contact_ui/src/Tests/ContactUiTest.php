@@ -33,8 +33,9 @@ class ContactUiTest extends WebTestBase {
   public function setUp() {
     parent::setUp();
 
-    // Place local actions blocks.
+    // Place local actions and local task blocks.
     $this->drupalPlaceBlock('local_actions_block');
+    $this->drupalPlaceBlock('local_tasks_block');
   }
 
   /**
@@ -118,6 +119,10 @@ class ContactUiTest extends WebTestBase {
     // Assert we were redirected back to the list of contacts.
     $this->assertUrl('crm-core/contact/1');
     $this->assertText('Fam. Johnson', 0, 'Contact updated.');
+
+    $this->drupalGet('crm-core/contact/1/edit');
+    $this->assertRaw('data-drupal-link-system-path="crm-core/contact/1/delete"', 'Local task "Delete" is available.');
+    $this->assertRaw('crm-core/contact/1/delete" class="button button--danger" data-drupal-selector="edit-delete" id="edit-delete"', 'Delete link is available.');
 
     // Check listing page.
     $this->drupalGet('crm-core/contact');

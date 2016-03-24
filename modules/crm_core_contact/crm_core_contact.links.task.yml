@@ -1,0 +1,5 @@
+entity.crm_core_contact.delete_form:
+  title: Delete
+  route_name: entity.crm_core_contact.delete_form
+  base_route: entity.crm_core_contact.canonical
+  weight: 10
