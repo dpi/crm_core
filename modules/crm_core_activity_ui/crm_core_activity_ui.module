@@ -43,16 +43,6 @@ function crm_core_activity_ui_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
- * Implements hook_views_api().
- */
-function crm_core_activity_ui_views_api() {
-  return array(
-    'api' => 3,
-    'path' => drupal_get_path('module', 'crm_core_activity_ui') . '/views',
-  );
-}
-
-/**
  * Implements hook_views_pre_render().
  */
 function crm_core_activity_ui_views_pre_render(ViewExecutable $view) {
@@ -81,13 +71,4 @@ function _crm_core_activity_ui_set_breadcrumb($contact) {
     l(t('Activities'), $contact_uri['path'] . '/activity'),
   );
   drupal_set_breadcrumb($breadcrumb);
-}
-
-/**
- * Activity UI view callback.
- */
-function crm_core_activity_ui_view($activity, $contact) {
-  _crm_core_activity_ui_set_breadcrumb($contact);
-
-  return crm_core_activity_view($activity);
 }
