@@ -6,6 +6,8 @@
 
 namespace Drupal\crm_core_contact\Tests;
 
+use Drupal\crm_core_activity\Entity\Activity;
+use Drupal\crm_core_activity\Entity\ActivityType;
 use Drupal\crm_core_contact\Entity\Contact;
 use Drupal\crm_core_contact\Entity\ContactType;
 use Drupal\simpletest\KernelTestBase;
@@ -28,6 +30,8 @@ class ContactCRUDTest extends KernelTestBase {
     'user',
     'crm_core',
     'crm_core_contact',
+    'crm_core_activity',
+    'datetime',
   );
 
   /**
@@ -38,6 +42,7 @@ class ContactCRUDTest extends KernelTestBase {
 
     $this->installConfig(array('field'));
     $this->installEntitySchema('crm_core_contact');
+    $this->installEntitySchema('crm_core_activity');
   }
 
   /**
@@ -86,14 +91,42 @@ class ContactCRUDTest extends KernelTestBase {
     $contact = Contact::create(array('type' => $type->type));
     $this->assertEqual(SAVED_NEW, $contact->save(), 'Contact saved.');
 
+    // Create second contact.
+    $contact_one = Contact::create(array('type' => $type->type));
+    $this->assertEqual(SAVED_NEW, $contact_one->save(), 'Contact saved.');
+
     // Load.
     $contact_load = Contact::load($contact->id());
     $uuid = $contact_load->uuid();
     $this->assertTrue(!empty($uuid), 'Loaded contact has uuid.');
 
-    // Delete.
+    $activity_type = ActivityType::create(array('type' => 'activity_test'));
+    $activity_type->save();
+
+    // Create activity and add participants contact.
+    $activity = Activity::create(array('type' => $activity_type->type));
+    $activity->get('activity_participants')->appendItem($contact);
+    $activity->get('activity_participants')->appendItem($contact_one);
+    $this->assertEqual(SAVED_NEW, $activity->save(), 'Activity saved.');
+
+    // Load activity.
+    $activity_load = Activity::load($activity->id());
+    $this->assertTrue(!empty($activity_load->uuid()), 'Loaded activity has uuid.');
+
+    // Delete first contact, activity should'n be deleted
+    // because it's related to second contact.
     $contact->delete();
     $contact_load = Contact::load($contact->id());
     $this->assertNull($contact_load, 'Contact deleted.');
+    $activity_load = Activity::load($activity->id());
+    $this->assertNotNull($activity_load, 'Activity not deleted.');
+
+    // Delete second contact and now activity should be deleted too.
+    $contact_one->delete();
+    $contact_load = Contact::load($contact_one->id());
+    $this->assertNull($contact_load, 'Contact deleted.');
+    $activity_load = Activity::load($activity->id());
+    $this->assertNull($activity_load, 'Activity deleted.');
   }
+
 }

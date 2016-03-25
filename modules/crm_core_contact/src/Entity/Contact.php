@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\crm_core_activity\Entity\Activity;
 use Drupal\crm_core_contact\ContactInterface;
 
 /**
@@ -172,6 +173,55 @@ class Contact extends ContentEntityBase implements ContactInterface {
     $account = \Drupal::currentUser();
     $record->uid = $account->id();
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function preDelete(EntityStorageInterface $storage, array $entities) {
+    parent::preDelete($storage, $entities);
+
+    $query = \Drupal::entityQuery('crm_core_activity');
+    $activity_ids = $query
+      ->condition('activity_participants.target_id', array_keys($entities), 'IN')
+      ->execute();
+    if (empty($activity_ids)) {
+      // No related Activities.
+      return;
+    }
+    // Load fully populated Activity objects to analyze/update.
+    $crm_core_activities = Activity::loadMultiple($activity_ids);
+
+    $activities_to_remove = array();
+
+    foreach ($crm_core_activities as $crm_core_activity) {
+      /** @var \Drupal\crm_core_activity\Entity\Activity $crm_core_activity */
+      $participants = $crm_core_activity->get('activity_participants')->getValue();
+      // Remove Contact from participants array.
+      $participants = array_diff(array_column($participants, 'target_id'), array_keys($entities));
+
+      if (empty($participants)) {
+        // Last main participant was deleted, so we should kill entire activity.
+        $activities_to_remove[] = $crm_core_activity->id();
+      }
+      else {
+        // Save Activity with renewed list.
+        $crm_core_activity->set('activity_participants', $participants);
+        $crm_core_activity->save();
+      }
+    }
+
+    if (!empty($activities_to_remove)) {
+      $crm_core_activity_storage = \Drupal::entityTypeManager()->getStorage('crm_core_activity');
+      $activities = $crm_core_activity_storage->loadMultiple($activities_to_remove);
+      $ids = array_keys($entities);
+      \Drupal::logger('crm_core_activity')->info('Deleted !count activities due to deleting contact id=%contact_id.', [
+        '!count' => count($activities_to_remove),
+        '%contact_id' => reset($ids),
+      ]);
+      $crm_core_activity_storage->delete($activities);
+    }
+  }
+
 
   /**
    * Gets the primary address.

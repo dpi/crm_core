@@ -24,6 +24,7 @@ class ContactUiTest extends WebTestBase {
   public static $modules = array(
     'text',
     'crm_core_contact',
+    'crm_core_activity',
     'crm_core_contact_ui',
   );
 

@@ -5,8 +5,6 @@
  * Provides an entity for recording a contact's activities.
  */
 
-use Drupal\crm_core_activity\Entity\Activity;
-
 /**
  * Implements hook_forms().
  *
@@ -26,55 +24,4 @@ function crm_core_activity_forms($form_id, $args) {
   }
 
   return $forms;
-}
-
-/**
- * Implements hook_crm_core_contact_delete().
- *
- * Adjusts Activities where contact is used in primary participants.
- */
-function crm_core_activity_crm_core_contact_delete($crm_core_contact) {
-  $query = new EntityFieldQuery();
-  $results = $query
-    ->entityCondition('entity_type', 'crm_core_activity')
-    ->fieldCondition('field_activity_participants', 'target_id', $crm_core_contact->contact_id)
-    ->execute();
-
-  if (empty($results)) {
-    // No related Activities.
-    return;
-  }
-
-  // Load fully populated Activity objects to analyze/update.
-  $activity_ids = array_keys($results['crm_core_activity']);
-  $crm_core_activities = Activity::loadMultiple($activity_ids);
-
-  $activities_to_remove = array();
-
-  foreach ($crm_core_activities as $crm_core_activity) {
-    $wrapped_activity = entity_metadata_wrapper('crm_core_activity', $crm_core_activity);
-    $participants = $wrapped_activity->field_activity_participants->value(array('identifier' => TRUE));
-
-    // Remove Contact from participants array.
-    $participants = array_diff($participants, array($crm_core_contact->contact_id));
-
-    if (empty($participants)) {
-      // Last main participant was deleted, so we should kill entire activity.
-      $activities_to_remove[] = $crm_core_activity->activity_id;
-    }
-    else {
-      // Save Activity with renewed list.
-      $wrapped_activity->field_activity_participants->set($participants);
-      $crm_core_activity->save();
-    }
-  }
-
-  if (!empty($activities_to_remove)) {
-    watchdog('crm_core_activity', 'Deleted !count activities due to deleting contact id=%contact_id.',
-      array(
-        '!count' => count($activities_to_remove),
-        '%contact_id' => $crm_core_contact->contact_id,
-      ), WATCHDOG_INFO);
-    \Drupal::entityTypeManager()->getStorage('crm_core_activity')->delete($activities_to_remove);
-  }
 }
