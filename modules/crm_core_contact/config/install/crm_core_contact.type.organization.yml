@@ -1,8 +1,8 @@
-type: organization
+langcode: en
+status: true
+dependencies: {  }
 name: Organization
+type: organization
 description: 'A collection of individuals or other organizations that has additional contact data.'
 locked: false
-primary_fields: { }
-status: true
-uuid: 843da9f8-1196-494d-8606-6df24474830b
-langcode: en
+primary_fields: {  }

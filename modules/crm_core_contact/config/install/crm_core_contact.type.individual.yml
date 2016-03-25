@@ -1,8 +1,8 @@
-type: individual
+langcode: en
+status: true
+dependencies: {  }
 name: Individual
+type: individual
 description: 'A single individual.'
 locked: false
-primary_fields: { }
-status: true
-uuid: 28191553-fbfc-45ce-8701-1cb7dbaab715
-langcode: en
+primary_fields: {  }

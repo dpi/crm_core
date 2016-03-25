@@ -1,5 +1,7 @@
 <?php
 
+use \Drupal\crm_core_contact\Entity\ContactType;
+
 /**
  * List crm relationship types
  *
@@ -168,7 +170,7 @@ function crm_core_relationship_ui_type_form($form, &$form_state, $relation_type 
     }
   }
 
-  $contact_types = crm_core_contact_types();
+  $contact_types = ContactType::loadMultiple();
 
   $options = array('crm_core_contact:*' => t('Any'));
   foreach ($contact_types as $contact_type) {

@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\crm_core_contact\Entity\Contact;
+
 /**
  * Implements hook_menu().
  */
@@ -231,7 +233,7 @@ function crm_core_relationship_ui_field_formatter_view($entity_type, $entity, $f
       // getting the contact id from the url
       $current_contact_id = $display['views_view']->args[0];
       $related_contact_id = ($items[1]['entity_id'] == $current_contact_id) ? $items[0]['entity_id'] : $items[1]['entity_id'];
-      $related_contact = crm_core_contact_load($related_contact_id);
+      $related_contact = Contact::load($related_contact_id);
       $contact_label = entity_label('crm_core_contact', $related_contact);
       $relationship_type = ($items[1]['entity_id'] == $current_contact_id) ? relation_get_type_label($entity, TRUE) : relation_get_type_label($entity);
       $created = date('Y-m-d H:i:s', $entity->created);
@@ -255,7 +257,7 @@ function crm_core_relationship_ui_field_formatter_view($entity_type, $entity, $f
       $current_contact_id = $display['views_view']->args[0];
       if (isset($items[0]['entity_id']) && isset($items[1]['entity_id'])) {
         $related_contact_id = ($items[1]['entity_id'] == $current_contact_id) ? $items[0]['entity_id'] : $items[1]['entity_id'];
-        $related_contact = crm_core_contact_load($related_contact_id);
+        $related_contact = Contact::load($related_contact_id);
         $contact_label = entity_label('crm_core_contact', $related_contact);
         $related_contact_uri = entity_uri('crm_core_contact', $related_contact);
 
@@ -266,12 +268,12 @@ function crm_core_relationship_ui_field_formatter_view($entity_type, $entity, $f
       break;
     case 'contact_relationship_human':
       $current_contact_id = $display['views_view']->args[0];
-      $current_contact = crm_core_contact_load($current_contact_id);
+      $current_contact = Contact::load($current_contact_id);
       $current_contact_label = entity_label('crm_core_contact', $current_contact);
       $current_contact_uri = entity_uri('crm_core_contact', $current_contact);
       $current_contact_link = l($current_contact_label, $current_contact_uri['path']);
       $related_contact_id = ($items[1]['entity_id'] == $current_contact_id) ? $items[0]['entity_id'] : $items[1]['entity_id'];
-      $related_contact = crm_core_contact_load($related_contact_id);
+      $related_contact = Contact::load($related_contact_id);
       $related_contact_label = entity_label('crm_core_contact', $related_contact);
       $related_contact_uri = entity_uri('crm_core_contact', $related_contact);
       $related_contact_link = l($related_contact_label, $related_contact_uri['path']);
@@ -297,7 +299,7 @@ function crm_core_relationship_ui_field_formatter_view($entity_type, $entity, $f
       break;
     case 'contact_relationship_current':
       $current_contact_id = $display['views_view']->args[0];
-      $current_contact = crm_core_contact_load($current_contact_id);
+      $current_contact = Contact::load($current_contact_id);
       $current_contact_label = entity_label('crm_core_contact', $current_contact);
 
       return array(
@@ -349,7 +351,7 @@ function crm_core_relationship_ui_views_pre_render(&$view) {
   if ($view->name == 'crm_relationships_by_contact') {
     // Grabbing 1st view argument to avoid preview problems.
     $contact_id = $view->args[0];
-    $contact = crm_core_contact_load($contact_id);
+    $contact = Contact::load($contact_id);
     _crm_core_relationships_ui_breadcrmub($contact);
     $view->build_info['title'] = t('Relationships for @contact_name', array('@contact_name' => $contact->label()));
   }

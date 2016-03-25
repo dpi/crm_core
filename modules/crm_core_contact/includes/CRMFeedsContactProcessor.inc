@@ -5,6 +5,9 @@
  * Class definition of CRMFeedsContactProcessor.
  */
 
+use Drupal\crm_core_contact\Entity\ContactType;
+use Drupal\crm_core_contact\Entity\Contact;
+
 /**
  * Creates contacts from feed items.
  */
@@ -47,7 +50,7 @@ class CRMFeedsContactProcessor extends FeedsProcessor {
    */
   protected function entityLoad(FeedsSource $source, $contact_id) {
     if ($this->config['update_existing'] == FEEDS_UPDATE_EXISTING) {
-      $contact = crm_core_contact_load($contact_id, NULL, TRUE);
+      $contact = Contact::load($contact_id);
     }
     else {
       // We're replacing the existing contact. Only save the absolutely necessary.
@@ -75,7 +78,7 @@ class CRMFeedsContactProcessor extends FeedsProcessor {
    * Delete a series of contacts.
    */
   protected function entityDeleteMultiple($contact_ids) {
-    crm_core_contact_delete_multiple($contact_ids);
+    \Drupal::entityTypeManager()->getStorage('crm_core_contact')->delete($contact_ids);
   }
 
   /**
@@ -212,7 +215,7 @@ class CRMFeedsContactProcessor extends FeedsProcessor {
    * Return available mapping targets.
    */
   public function getMappingTargets() {
-    $types = crm_core_contact_types();
+    $types = ContactType::loadMultiple();
     $type = $types[$this->config['contact_type']];
     $targets = parent::getMappingTargets();
 

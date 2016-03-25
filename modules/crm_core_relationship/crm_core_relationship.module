@@ -8,6 +8,8 @@
  * creation of relationship between contacts
  */
 
+use Drupal\crm_core_contact\Entity\ContactType;
+
 /**
  * Implements hook_permission().
  */
@@ -138,7 +140,7 @@ function crm_core_relationship_load_contact_types($relation_type, $reverse = 0) 
     return array();
   }
 
-  $contact_types = crm_core_contact_types();
+  $contact_types = ContactType::loadMultiple();
   $bundles = $relation_type->directional && $reverse ? $relation_type->target_bundles : $relation_type->source_bundles;
 
   if (in_array('crm_core_contact:*', $bundles)) {

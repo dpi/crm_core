@@ -4,6 +4,7 @@
  * @file
  * Provides the UI for viewing activities.
  */
+use Drupal\crm_core_contact\Entity\Contact;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -49,7 +50,7 @@ function crm_core_activity_ui_views_pre_render(ViewExecutable $view) {
   if ($view->storage->id() == 'crm_activities_by_contact' && $view->current_display == 'page') {
     // Grabbing 1st view argument to avoid preview problems.
     $contact_id = $view->args[0];
-    $contact = crm_core_contact_load($contact_id);
+    $contact = Contact::load($contact_id);
     _crm_core_activity_ui_set_breadcrumb($contact);
     $view->build_info['title'] = t('Activities for @contact_name', array('@contact_name' => $contact->label()));
   }

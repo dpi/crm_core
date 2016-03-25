@@ -5,6 +5,8 @@
  * Provides a user interface for CRM Core Contact.
  */
 
+use Drupal\crm_core_contact\Entity\ContactType;
+
 /**
  * Implements hook_menu().
  */
@@ -98,7 +100,7 @@ function crm_core_contact_ui_theme() {
  */
 function crm_core_contact_ui_admin_menu_map() {
 
-  $contact_types = array_keys(crm_core_contact_types());
+  $contact_types = array_keys(ContactType::loadMultiple());
   $map = array();
   $map['admin/structure/crm-core/contact-types/manage/%crm_core_contact_type'] = array(
     'parent' => 'admin/structure/crm-core/contact-types',

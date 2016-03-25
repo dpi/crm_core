@@ -1,5 +1,7 @@
 <?php
 
+use \Drupal\crm_core_contact\Entity\ContactType;
+
 /**
  * Wrapper around entity_ui_get_form().
  *
@@ -92,7 +94,7 @@ function crm_core_relationship_form($form, &$form_state, $relation) {
         '#title' => $reverse_field ? t('Destination contact name') : t('Source contact name'),
         '#description' => (t('Following contact types allowed: !types.', array('!types' => $contact_type_names))),
         '#type' => 'textfield',
-        '#default_value' => !($reverse_field ^ $relation->reverse) ? crm_core_contact_title($relation->crm_core_contact) . " [cid:{$relation->crm_core_contact->contact_id}]" : '',
+        '#default_value' => !($reverse_field ^ $relation->reverse) ? $relation->crm_core_contact->label() . " [cid:{$relation->crm_core_contact->contact_id}]" : '',
         '#disabled' => !($reverse_field ^ $relation->reverse),
         '#required' => TRUE,
         '#autocomplete_path' => 'crm-core/contact/' . $relation->crm_core_contact->contact_id . '/relationships/add/' . $relation->relation_type . '/' . $reverse_field . '/autocomplete',
@@ -204,7 +206,7 @@ function crm_core_relationship_ui_add_relationship($contact) {
   }
   else {
     foreach (array(0, 1) as $reverse) {
-      foreach (crm_core_contact_types(TRUE) as $contact_type) {
+      foreach (ContactType::loadActive() as $contact_type) {
         $relationship_types = crm_core_relationship_load_relationship_types($contact_type->type, $reverse);
         foreach ($relationship_types as $relationship_type) {
           if (user_access('create relation entities of bundle ' . $relationship_type->relation_type) || user_access('create relation entities of any contact relationship')) {
@@ -381,7 +383,7 @@ function crm_core_relationship_ui_add_relationship_autocomplete($crm_core_contac
   $result = $query->execute();
   $contacts = entity_load('crm_core_contact', array_keys($result['crm_core_contact']));
   foreach ($contacts as $contact) {
-    $crm_core_contact_title = crm_core_contact_title($contact);
+    $crm_core_contact_title = $contact->label();
     $matches[$crm_core_contact_title . " [cid:$contact->contact_id]"] = $crm_core_contact_title;
   }
 

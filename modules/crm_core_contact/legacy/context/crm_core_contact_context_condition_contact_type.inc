@@ -5,6 +5,8 @@
  * Class for determining if the user is in the right contact context.
  */
 
+use Drupal\crm_core_contact\Entity\ContactType;
+
 /**
  * Trigger context on node view only.
  */
@@ -27,7 +29,7 @@ class crm_core_contact_context_condition_contact_type extends context_condition 
 
   function condition_values() {
     $values = array();
-    foreach (crm_core_contact_types() as $type) {
+    foreach (ContactType::loadMultiple() as $type) {
       $values[$type->type] = check_plain($type->name);
     }
     return $values;

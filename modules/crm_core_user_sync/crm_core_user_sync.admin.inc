@@ -1,5 +1,8 @@
 <?php
 
+use Drupal\crm_core_contact\Entity\ContactType;
+use Drupal\crm_core_contact\Entity\Contact;
+
 /**
  * Admin form.
  */
@@ -7,7 +10,7 @@ function crm_core_user_sync_admin_form($form, &$form_state) {
   $form = array();
 
   $roles = user_roles(TRUE);
-  $types = crm_core_contact_types();
+  $types = ContactType::loadMultiple();
 
   $types_options = array();
   foreach ($types as $key => $type) {
@@ -173,7 +176,7 @@ function crm_core_user_sync_admin_edit_rule_form($form, &$form_state, $rule_key 
   $form = array();
 
   $roles = array('' => t('- Select -')) + user_roles(TRUE);
-  $types = crm_core_contact_types();
+  $types = ContactType::loadMultiple();
 
   $types_options = array('' => t('- Select -'));
   foreach ($types as $key => $type) {
@@ -315,7 +318,7 @@ function crm_core_user_sync_edit_relation_form($form, &$form_state, $relation) {
     }
 
     if (!empty($_GET['contact_id'])) {
-      $contact = crm_core_contact_load($_GET['contact_id']);
+      $contact = Contact::load($_GET['contact_id']);
       $disabled_contact_field = !empty($contact);
     }
   }
@@ -327,7 +330,7 @@ function crm_core_user_sync_edit_relation_form($form, &$form_state, $relation) {
     }
 
     if (!empty($relation->endpoints[LANGUAGE_NONE][1]['entity_id'])) {
-      $contact = crm_core_contact_load($relation->endpoints[LANGUAGE_NONE][1]['entity_id']);
+      $contact = Contact::load($relation->endpoints[LANGUAGE_NONE][1]['entity_id']);
     }
   }
 
@@ -493,7 +496,7 @@ function crm_core_user_sync_contact_autocomplete($search_string) {
   if (!empty($result)) {
     $contacts = entity_load('crm_core_contact', array_keys($result['crm_core_contact']));
     foreach ($contacts as $contact) {
-      $crm_core_contact_title = crm_core_contact_title($contact);
+      $crm_core_contact_title = $contact->label();
       $matches[$crm_core_contact_title . " [contact_id:$contact->contact_id]"] = $crm_core_contact_title;
     }
   }

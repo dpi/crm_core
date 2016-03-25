@@ -43,16 +43,6 @@ function crm_core_contact_ui_revert_form($form, &$form_state, $contact, $vid) {
     'crm-core/contact/' . $contact->contact_id . '/revisions', 'Reverting the contact will result in a new revision being created', t('Yes'), t('Cancel'));
 }
 
-function crm_core_contact_ui_revert_form_submit($form, FormStateInterface $form_state) {
-
-  $contact = $form_state['crm_core_ui']['contact'];
-
-  if (crm_core_contact_revert($contact, $form_state->getValue('vid'))) {
-    drupal_set_message(t('Contact reverted.'));
-  }
-  $form_state->setRedirectUrl(Url::fromUri('base:crm-core/contact/' . $contact->contact_id . '/revisions'));
-}
-
 /**
  * Prepares variables for list of available contact type templates.
  *

@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\crm_core_contact\Entity\Contact;
+
 /**
  * @file
  * Resource definitions for services module.
@@ -25,7 +27,7 @@ function _crm_core_contact_resource_access($op, $arg) {
     return crm_core_contact_access($op, $contact_data['type']);
   }
   elseif (is_numeric($arg[0])) {
-    $crm_core_contact = crm_core_contact_load($arg[0]);
+    $crm_core_contact = Contact::load($arg[0]);
 
     return crm_core_contact_access($op, $crm_core_contact);
   }
@@ -55,7 +57,7 @@ function _crm_core_contact_resource_index($page, $page_size) {
     ->execute()
     ->fetchCol();
 
-  $contacts = crm_core_contact_load_multiple($cids);
+  $contacts = Contact::loadMultiple($cids);
 
   return services_resource_build_index_list($contacts, 'crm_core_contact', 'contact_id');
 }
