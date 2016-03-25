@@ -101,6 +101,13 @@ class ActivityUiTest extends WebTestBase {
     $this->drupalGet('crm-core/activity');
     $this->assertLink('Vestibulum', 0, 'Updated activity listed properly.');
 
+    // Test that empty activity_participants field is not allowed.
+    $empty_participant = array(
+      'activity_participants[0][target_id]' => '',
+    );
+    $this->drupalPostForm('crm-core/activity/1/edit', $empty_participant, 'Save Activity');
+    $this->assertText('Participants (value 1) field is required.', 'Empty activity participant not allowed.');
+
     // Update phone call activity and assert its title changed on the list.
     $phonecall_activity = array(
       'title[0][value]' => 'Commodo',
