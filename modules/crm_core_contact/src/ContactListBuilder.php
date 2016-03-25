@@ -7,8 +7,6 @@
 
 namespace Drupal\crm_core_contact;
 
-use Drupal\Component\Utility\SafeMarkup;
-use Drupal\Core\Datetime\Date;
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
@@ -82,11 +80,11 @@ class ContactListBuilder extends EntityListBuilder {
 
     $row['label']['data'] = array(
       '#type' => 'link',
-      '#title' => SafeMarkup::checkPlain($entity->label()),
+      '#title' => $entity->label(),
       '#url' => $entity->urlInfo(),
     );
 
-    $row['type'] = SafeMarkup::checkPlain($entity->get('type')->entity->label());
+    $row['type'] = $entity->get('type')->entity->label();
 
     $row['changed'] = $this->dateFormatter->format($entity->get('changed')->value, 'short');
 
@@ -103,4 +101,5 @@ class ContactListBuilder extends EntityListBuilder {
 
     return $build;
   }
+
 }
