@@ -7,7 +7,7 @@ class crm_core_contact_handler_field_contact_revision extends views_handler_fiel
   function construct() {
     parent::construct();
 
-    $this->additional_fields['vid'] = 'vid';
+    $this->additional_fields['revision_id'] = 'revision_id';
   }
 
   function option_definition() {
@@ -35,7 +35,7 @@ class crm_core_contact_handler_field_contact_revision extends views_handler_fiel
 
   function render($values) {
     $text = !empty($this->options['text']) ? $this->options['text'] : t('view');
-    $vid = $values->{$this->aliases['vid']};
+    $vid = $values->{$this->aliases['revision_id']};
 
     return l($text, 'crm-core/contact/' . $vid);
   }

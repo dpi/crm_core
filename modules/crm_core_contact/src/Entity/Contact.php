@@ -21,7 +21,6 @@ use Drupal\crm_core_contact\ContactInterface;
  *   id = "crm_core_contact",
  *   label = @Translation("CRM Core Contact"),
  *   bundle_label = @Translation("Contact type"),
- *   label_callback = "Drupal\crm_core_contact\Entity\Contact::labelCallback",
  *   handlers = {
  *     "access" = "Drupal\crm_core_contact\ContactAccessControlHandler",
  *     "form" = {
@@ -33,13 +32,11 @@ use Drupal\crm_core_contact\ContactInterface;
  *   },
  *   base_table = "crm_core_contact",
  *   revision_table = "crm_core_contact_revision",
- *   fieldable = TRUE,
  *   entity_keys = {
  *     "id" = "contact_id",
- *     "revision" = "vid",
+ *     "revision" = "revision_id",
  *     "bundle" = "type",
  *     "uuid" = "uuid",
- *     "user" = "uid",
  *   },
  *   bundle_entity_type = "crm_core_contact_type",
  *   permission_granularity = "bundle",
@@ -50,7 +47,7 @@ use Drupal\crm_core_contact\ContactInterface;
  *   links = {
  *     "canonical" = "/crm-core/contact/{crm_core_contact}",
  *     "collection" = "/crm-core/contact",
- *     "edit_form" = "/crm-core/contact/{crm_core_contact}/edit",
+ *     "edit-form" = "/crm-core/contact/{crm_core_contact}/edit",
  *     "delete-form" = "/crm-core/contact/{crm_core_contact}/delete"
  *   }
  * )
@@ -65,30 +62,7 @@ class Contact extends ContentEntityBase implements ContactInterface {
    * {@inheritdoc}
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
-    $fields = array();
-
-    $fields['contact_id'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('Contact ID'))
-      ->setDescription(t('The contact ID.'))
-      ->setReadOnly(TRUE)
-      ->setSetting('unsigned', TRUE);
-
-    $fields['uuid'] = BaseFieldDefinition::create('uuid')
-      ->setLabel(t('UUID'))
-      ->setDescription(t('The contact UUID.'))
-      ->setReadOnly(TRUE);
-
-    $fields['vid'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('Revision ID'))
-      ->setDescription(t('The contact revision ID.'))
-      ->setReadOnly(TRUE)
-      ->setSetting('unsigned', TRUE);
-
-    $fields['type'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Type'))
-      ->setDescription(t('The contact type.'))
-      ->setSetting('target_type', 'crm_core_contact_type')
-      ->setReadOnly(TRUE);
+    $fields = parent::baseFieldDefinitions($entity_type);
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
@@ -134,12 +108,12 @@ class Contact extends ContentEntityBase implements ContactInterface {
       ->setRevisionable(TRUE)
       ->setTranslatable(TRUE)
       ->setDisplayOptions('form', array(
-          'type' => 'text_textarea',
-          'weight' => 25,
-          'settings' => array(
-            'rows' => 4,
-          ),
-        ));
+        'type' => 'text_textarea',
+        'weight' => 25,
+        'settings' => array(
+          'rows' => 4,
+        ),
+      ));
 
     return $fields;
   }
@@ -214,14 +188,13 @@ class Contact extends ContentEntityBase implements ContactInterface {
       $crm_core_activity_storage = \Drupal::entityTypeManager()->getStorage('crm_core_activity');
       $activities = $crm_core_activity_storage->loadMultiple($activities_to_remove);
       $ids = array_keys($entities);
-      \Drupal::logger('crm_core_activity')->info('Deleted !count activities due to deleting contact id=%contact_id.', [
-        '!count' => count($activities_to_remove),
+      \Drupal::logger('crm_core_activity')->info('Deleted @count activities due to deleting contact id=%contact_id.', [
+        '@count' => count($activities_to_remove),
         '%contact_id' => reset($ids),
       ]);
       $crm_core_activity_storage->delete($activities);
     }
   }
-
 
   /**
    * Gets the primary address.
@@ -273,37 +246,16 @@ class Contact extends ContentEntityBase implements ContactInterface {
   }
 
   /**
-   * Returns the label of the contact.
-   *
-   * @param \Drupal\crm_core_contact\Entity\Contact $entity
-   *   The Contact entity.
-   *
-   * @return string
-   *   Contact label.
-   */
-  public static function labelCallback(Contact $entity) {
-    // @todo Replace with the value of the contact_name field, when name module will be available.
-    $label = $entity->get('name')->value;
-    \Drupal::moduleHandler()->alter('crm_core_contact_label', $label, $entity);
-
-    return $label;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getChangedTime() {
-    return $this->changed;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function label() {
-    $label = parent::label();
+    // @todo Replace with the value of the contact_name field, when name module will be available.
+    $label = $this->get('name')->value;
     if (empty($label)) {
       $label = t('Nameless #@id', ['@id' => $this->id()]);
     }
+    \Drupal::moduleHandler()->alter('crm_core_contact_label', $label, $entity);
+
     return $label;
   }
 

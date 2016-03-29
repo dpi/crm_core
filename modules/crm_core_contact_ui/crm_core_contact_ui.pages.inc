@@ -29,11 +29,11 @@ function crm_core_contact_ui_revision_form($contact) {
 /**
  * Form for reverting a contact to a previous version.
  */
-function crm_core_contact_ui_revert_form($form, &$form_state, $contact, $vid) {
+function crm_core_contact_ui_revert_form($form, &$form_state, $contact, $revision_id) {
 
-  $form['vid'] = array(
+  $form['revision_id'] = array(
     '#type' => 'value',
-    '#value' => $vid,
+    '#value' => $revision_id,
   );
 
   $form_state['crm_core_ui']['contact'] = $contact;

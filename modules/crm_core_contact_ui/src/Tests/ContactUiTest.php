@@ -237,6 +237,8 @@ class ContactUiTest extends WebTestBase {
 
     // Then I should not see a delete link.
     $this->assertNoContactTypeLink('individual/delete', 'No delete link for individual.');
+    $this->drupalGet('admin/structure/crm-core/contact-types/individual/delete');
+    $this->assertResponse(403);
 
     // When I edit the organization type.
     $this->drupalGet('admin/structure/crm-core/contact-types/organization');

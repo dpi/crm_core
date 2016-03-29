@@ -23,7 +23,7 @@ use Drupal\crm_core_contact\ContactTypeInterface;
  *     "access" = "Drupal\crm_core_contact\ContactTypeAccessControlHandler",
  *     "form" = {
  *       "default" = "Drupal\crm_core_contact\Form\ContactTypeForm",
- *       "delete" = "Drupal\crm_core_contact\Form\ContactTypeDeleteForm",
+ *       "delete" = "Drupal\Core\Entity\EntityDeleteForm",
  *       "toggle" = "Drupal\crm_core_contact\Form\ContactTypeToggleForm",
  *     },
  *     "list_builder" = "Drupal\crm_core_contact\ContactTypeListBuilder",
@@ -135,7 +135,7 @@ class ContactType extends ConfigEntityBundleBase implements ContactTypeInterface
     if (!empty($results)) {
       $contacts = Contact::loadMultiple($results);
       \Drupal::entityTypeManager()->getStorage('crm_core_contact')->delete($contacts);
-      watchdog('crm_core_contact', 'Delete !count contacts due to deletion of contact type.', array('!count' => count($results)), WATCHDOG_INFO);
+      \Drupal::logger('crm_core_contact')->info('Delete @count contacts due to deletion of contact type.', ['@count' => count($results)]);
     }
   }
 

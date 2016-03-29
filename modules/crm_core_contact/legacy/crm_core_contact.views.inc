@@ -146,12 +146,12 @@ function crm_core_contact_views_data() {
   $data['crm_core_contact_revision']['table']['group'] = t('CRM Core Contact revision');
 
   $data['crm_core_contact_revision']['table']['base'] = array(
-    'field' => 'vid',
+    'field' => 'revision_id',
     'title' => t('CRM Core Contact revision'),
     'help' => t('Contact revisions from CRM Core.'),
   );
 
-  $data['crm_core_contact_revision']['vid'] = array(
+  $data['crm_core_contact_revision']['revision_id'] = array(
     'title' => t('Contact revision ID'),
     'help' => t('The unique internal identifier for a contact revision.'),
     'field' => array(

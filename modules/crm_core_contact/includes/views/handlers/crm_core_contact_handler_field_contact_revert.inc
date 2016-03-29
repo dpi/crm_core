@@ -7,7 +7,7 @@ class crm_core_contact_handler_field_contact_revert extends views_handler_field 
   function init(&$view, $options) {
     parent::init($view, $options);    
       $this->additional_fields['contact_id'] = 'contact_id';
-      $this->additional_fields['vid'] = 'vid';
+      $this->additional_fields['revision_id'] = 'revision_id';
   }
  
   function access() {
@@ -47,12 +47,12 @@ class crm_core_contact_handler_field_contact_revert extends views_handler_field 
     $max_vid = db_query("SELECT max(vid) FROM {crm_core_contact_revision} WHERE contact_id = :contact_id", 
     array(':contact_id' => $values->{$this->aliases['contact_id']}))->fetchField();
     
-    if ($values->{$this->aliases['vid']} == $max_vid) {
+    if ($values->{$this->aliases['revision_id']} == $max_vid) {
       return t('current');
     }
     
     $this->options['alter']['make_link'] = TRUE;
-    $this->options['alter']['path'] = 'crm-core/contact/' . $values->{$this->aliases['contact_id']} . '/revert/' . $values->{$this->aliases['vid']};
+    $this->options['alter']['path'] = 'crm-core/contact/' . $values->{$this->aliases['contact_id']} . '/revert/' . $values->{$this->aliases['revision_id']};
 
     $text = !empty($this->options['text']) ? $this->options['text'] : t('revert');
     return $text;
