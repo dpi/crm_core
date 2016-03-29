@@ -46,7 +46,7 @@ function crm_core_contact_views_data() {
     ),
     'filter' => array(
       'handler' => 'views_handler_filter_in_operator',
-      'options callback' => 'crm_core_contact_type_get_name',
+      'options callback' => 'Drupal\crm_core_contact\Entity\ContactType::getNames',
     ),
     'sort' => array(
       'handler' => 'views_handler_sort',

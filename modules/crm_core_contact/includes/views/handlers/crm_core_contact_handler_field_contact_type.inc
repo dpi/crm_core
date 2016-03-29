@@ -52,7 +52,7 @@ class crm_core_contact_handler_field_contact_type extends views_handler_field {
       $this->options['alter']['path'] = 'admin/structure/crm-core/contact-types/manage/' . $values->{$this->field_alias};
     }
 
-    $type = $this->options['machine_name'] ? $values->{$this->field_alias} : crm_core_contact_type_get_name($values->{$this->field_alias});
+    $type = $this->options['machine_name'] ? $values->{$this->field_alias} : \Drupal\crm_core_contact\Entity\ContactType::load($values->{$this->field_alias})->label();
 
     return check_plain($type);
   }

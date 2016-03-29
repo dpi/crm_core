@@ -9,6 +9,7 @@ namespace Drupal\crm_core_contact\Entity;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\crm_core_contact\ContactTypeInterface;
 
 /**
  * CRM Contact Type Entity Class.
@@ -49,7 +50,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
  *   }
  * )
  */
-class ContactType extends ConfigEntityBundleBase {
+class ContactType extends ConfigEntityBundleBase implements ContactTypeInterface {
 
   /**
    * The machine-readable name of this type.
@@ -151,4 +152,16 @@ class ContactType extends ConfigEntityBundleBase {
 
     return ContactType::loadMultiple($ids);
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getNames() {
+    $contact_types = ContactType::loadMultiple();
+    $contact_types = array_map(function ($contact_type) {
+      return $contact_type->label();
+    }, $contact_types);
+    return $contact_types;
+  }
+
 }

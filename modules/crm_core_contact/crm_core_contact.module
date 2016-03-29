@@ -7,40 +7,6 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\crm_core_contact\Entity\Contact;
-use Drupal\crm_core_contact\Entity\ContactType;
-
-/**
- * Returns the human readable name of any or all contact types.
- *
- * @param string|null $type
- *   (optional) Specify the type whose name to return.
- *
- * @return
- *   If $type is specified, a string containing the human
- *   readable name of the type.
- *   If $type isn't specified an array containing all human
- *   readable names keyed on the machine type.
- */
-function crm_core_contact_type_get_name($type = NULL) {
-  $contact_types = ContactType::loadMultiple();
-
-  // If type is set return the name if it exists.
-  if (!empty($type)) {
-    if (isset($contact_types[$type])) {
-      return $contact_types[$type]->name;
-    }
-    else {
-      return FALSE;
-    }
-  }
-
-  // Otherwise return a mapping of type => name.
-  foreach ($contact_types as $key => $value) {
-    $contact_types[$key] = $value->name;
-  }
-
-  return $contact_types;
-}
 
 /**
  * Implements hook_theme().

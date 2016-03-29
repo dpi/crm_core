@@ -69,6 +69,10 @@ class ContactCRUDTest extends KernelTestBase {
     $uuid = $contact_type_load->uuid();
     $this->assertTrue(!empty($uuid), 'Loaded contact type has uuid.');
 
+    // Test ContactType::getNames().
+    $contact_type_labels = ContactType::getNames();
+    $this->assertTrue($contact_type->name == $contact_type_labels[$contact_type->type]);
+
     // Delete.
     $contact_type_load->delete();
     $contact_type_load = ContactType::load($type);

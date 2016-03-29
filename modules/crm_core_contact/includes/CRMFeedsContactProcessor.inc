@@ -117,7 +117,7 @@ class CRMFeedsContactProcessor extends FeedsProcessor {
    * Override parent::configDefaults().
    */
   public function configDefaults() {
-    $types = crm_core_contact_type_get_name();
+    $types = ContactType::getNames();
     $type = key($types);
     return array(
       'contact_type' => $type,
@@ -130,7 +130,7 @@ class CRMFeedsContactProcessor extends FeedsProcessor {
    * Override parent::configForm().
    */
   public function configForm(&$form_state) {
-    $types = crm_core_contact_type_get_name();
+    $types = ContactType::getNames();
     array_walk($types, 'check_plain');
     $form = parent::configForm($form_state);
     $form['contact_type'] = array(
