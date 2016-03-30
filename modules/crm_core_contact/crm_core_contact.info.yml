@@ -14,6 +14,10 @@ dependencies:
   - views
   - text
 
+test_dependencies:
+  - name
+  - entity
+
   # Field dependencies
   # @todo Readd once awaillable and still needed.
 #  - field_group
