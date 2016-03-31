@@ -255,6 +255,29 @@ class ContactUiTest extends WebTestBase {
   }
 
   /**
+   * Test if the field UI is displayed on contact bundle.
+   */
+  public function testFieldsUi() {
+    $user = $this->drupalCreateUser([
+      'administer crm_core_contact display',
+      'administer crm_core_contact form display',
+      'administer crm_core_contact fields',
+    ]);
+    $this->drupalLogin($user);
+
+    $this->drupalGet('admin/structure/crm-core/contact-types/household/fields');
+    $this->assertText(t('Manage fields'), 'Manage fields local task in available.');
+    $this->assertText(t('Manage form display'), 'Manage form display local task in available.');
+    $this->assertText(t('Manage display'), 'Manage display local task in available.');
+
+    $this->drupalGet('admin/structure/crm-core/contact-types/household/form-display');
+    $this->assertText(t('Name'), 'Name field is available on form display.');
+
+    $this->drupalGet('admin/structure/crm-core/contact-types/household/display');
+    $this->assertText(t('Name'), 'Name field is available on manage display.');
+  }
+
+  /**
    * Asserts a contact type link.
    *
    * The path 'admin/structure/crm-core/contact-types/' gets prepended to the

@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\crm_core_activity_ui\Tests\ActivityUiTest.
+ * Contains \Drupal\crm_core_activity\Tests\ActivityUiTest.
  */
 
-namespace Drupal\crm_core_activity_ui\Tests;
+namespace Drupal\crm_core_activity\Tests;
 
 use Drupal\crm_core_contact\Entity\Contact;
 use Drupal\simpletest\WebTestBase;
@@ -23,7 +23,9 @@ class ActivityUiTest extends WebTestBase {
    * @var array
    */
   public static $modules = array(
-    'crm_core_activity_ui',
+    'crm_core_contact_ui',
+    'crm_core_activity',
+    'crm_core_ui',
   );
 
   /**
@@ -34,6 +36,8 @@ class ActivityUiTest extends WebTestBase {
 
     // Place local actions blocks.
     $this->drupalPlaceBlock('local_actions_block');
+
+    $this->drupalPlaceBlock('system_breadcrumb_block');
   }
 
   /**
@@ -52,6 +56,7 @@ class ActivityUiTest extends WebTestBase {
       'administer crm_core_contact entities',
       'view any crm_core_contact entity',
       'administer crm_core_activity entities',
+      'administer activity types',
     ));
     $this->drupalLogin($user);
 
@@ -67,10 +72,11 @@ class ActivityUiTest extends WebTestBase {
     $this->assertLink(t('Add an activity'));
 
     $this->drupalGet('crm-core/activity/add');
-    $this->assertLink(t('Add Meeting'));
-    $this->assertLink(t('Add Phone call'));
 
-    // Create Meeting activity. Ensure it it listed.
+    $this->assertLink(t('Meeting'));
+    $this->assertLink(t('Phone call'));
+
+    // Create Meeting activity. Ensure it is listed.
     $meeting_activity = array(
       'title[0][value]' => 'Pellentesque',
       'activity_date[0][value][date]' => $this->randomDate(),
@@ -78,6 +84,12 @@ class ActivityUiTest extends WebTestBase {
       'activity_notes[0][value]' => $this->randomString(),
       'activity_participants[0][target_id]' => $household->label() . ' (' . $household->id() . ')',
     );
+
+    // Assert the breadcrumb.
+    $this->assertLink(t('Home'));
+    $this->assertLink(t('CRM Core'));
+    $this->assertLink(t('Activities'));
+
     $this->drupalPostForm('crm-core/activity/add/meeting', $meeting_activity, 'Save Activity');
     $this->assertText('Activity Pellentesque created.', 'No errors after adding new activity.');
 
@@ -132,6 +144,33 @@ class ActivityUiTest extends WebTestBase {
     // Assert there is no activities left.
     $this->drupalGet('crm-core/activity');
     $this->assertText(t('There are no activities available.'), 'No activities listed.');
+
+    // Test activity type operations.
+    $this->drupalGet('admin/structure/crm-core/activity-types');
+
+    // Add new activity type.
+    $this->clickLink('Add activity type');
+    $new_activity_type = array(
+      'name' => 'New activity type',
+      'type' => 'new_activity_type',
+      'description' => 'New activity type description',
+    );
+    $this->drupalPostForm(NULL, $new_activity_type, 'Save activity type');
+
+    // Check that new activity type is displayed in activity types overview.
+    $this->drupalGet('admin/structure/crm-core/activity-types');
+    $this->assertText($new_activity_type['name']);
+
+    // Edit activity type.
+    $this->clickLink('Edit', 1);
+    $edit = array(
+      'name' => 'Edited activity type',
+    );
+    $this->drupalPostForm(NULL, $edit, 'Save activity type');
+    $this->drupalGet('admin/structure/crm-core/activity-types');
+    $this->assertText($edit['name']);
+
+    // @todo: Add test for delete operation.
   }
 
   /**

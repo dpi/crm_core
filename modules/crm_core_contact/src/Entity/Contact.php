@@ -39,6 +39,7 @@ use Drupal\crm_core_contact\ContactInterface;
  *     "uuid" = "uuid",
  *   },
  *   bundle_entity_type = "crm_core_contact_type",
+ *   field_ui_base_route = "entity.crm_core_contact_type.edit_form",
  *   permission_granularity = "bundle",
  *   permission_labels = {
  *     "singular" = @Translation("Contact"),
@@ -100,7 +101,9 @@ class Contact extends ContentEntityBase implements ContactInterface {
         'label' => 'hidden',
         'type' => 'string',
         'weight' => 0,
-      ));
+      ))
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['revision_log'] = BaseFieldDefinition::create('string_long')
       ->setLabel(t('Revision log message'))
