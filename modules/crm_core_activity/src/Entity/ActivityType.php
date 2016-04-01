@@ -27,9 +27,6 @@ use Drupal\field\Entity\FieldConfig;
  *       "toggle" = "Drupal\crm_core_activity\Form\ActivityTypeToggleForm",
  *     },
  *     "list_builder" = "Drupal\crm_core_activity\ActivityTypeListBuilder",
- *     "route_provider" = {
- *       "html" = "Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider",
- *     },
  *   },
  *   admin_permission = "administer activity types",
  *   entity_keys = {

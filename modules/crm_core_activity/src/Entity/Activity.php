@@ -30,9 +30,6 @@ use Drupal\crm_core_contact\ContactInterface;
  *     },
  *     "list_builder" = "Drupal\crm_core_activity\ActivityListBuilder",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "route_provider" = {
- *        "html" = "Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider",
- *      },
  *   },
  *   base_table = "crm_core_activity",
  *   revision_table = "crm_core_activity_revision",
@@ -52,8 +49,6 @@ use Drupal\crm_core_contact\ContactInterface;
  *     "plural" = @Translation("Activities"),
  *   },
  *   links = {
- *     "add-page" = "/crm-core/activity/add",
- *     "add-form" = "/crm-core/activity/add/{crm_core_activity_type}",
  *     "canonical" = "/crm-core/activity/{crm_core_activity}",
  *     "delete-form" = "/crm-core/activity/{crm_core_activity}/delete",
  *     "edit-form" = "/crm-core/activity/{crm_core_activity}/edit",
