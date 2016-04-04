@@ -29,6 +29,7 @@ use Drupal\crm_core_contact\ContactInterface;
  *       "delete" = "Drupal\crm_core_activity\Form\ActivityDeleteForm",
  *     },
  *     "list_builder" = "Drupal\crm_core_activity\ActivityListBuilder",
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *   },
  *   base_table = "crm_core_activity",
@@ -57,7 +58,6 @@ use Drupal\crm_core_contact\ContactInterface;
  *   }
  * )
  *
- * @todo Add Views support.
  * @todo Replace list builder with a view.
  */
 class Activity extends ContentEntityBase implements ActivityInterface {

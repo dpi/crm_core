@@ -24,6 +24,7 @@ class ActivityUiTest extends WebTestBase {
    */
   public static $modules = array(
     'crm_core_activity_ui',
+    'crm_core_tests',
   );
 
   /**
@@ -95,11 +96,17 @@ class ActivityUiTest extends WebTestBase {
     // Update activity and assert its title changed on the list.
     $meeting_activity = array(
       'title[0][value]' => 'Vestibulum',
+      'activity_notes[0][value]' => 'Pellentesque egestas neque sit',
     );
     $this->drupalPostForm('crm-core/activity/1/edit', $meeting_activity, 'Save Activity');
     $this->assertText('Vestibulum', 'Activity updated.');
     $this->drupalGet('crm-core/activity');
     $this->assertLink('Vestibulum', 0, 'Updated activity listed properly.');
+
+    // Get test view page and check fields data.
+    $this->drupalGet('activity-view-data');
+    $this->assertText('Vestibulum');
+    $this->assertText('Pellentesque egestas neque sit');
 
     // Test that empty activity_participants field is not allowed.
     $empty_participant = array(
