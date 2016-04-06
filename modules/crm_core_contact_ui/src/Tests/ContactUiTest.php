@@ -26,6 +26,7 @@ class ContactUiTest extends WebTestBase {
     'crm_core_contact',
     'crm_core_activity',
     'crm_core_contact_ui',
+    'crm_core_tests',
   );
 
   /**
@@ -127,6 +128,10 @@ class ContactUiTest extends WebTestBase {
     $this->drupalGet('crm-core/contact/1/edit');
     $this->assertRaw('data-drupal-link-system-path="crm-core/contact/1/delete"', 'Local task "Delete" is available.');
     $this->assertRaw('crm-core/contact/1/delete" class="button button--danger" data-drupal-selector="edit-delete" id="edit-delete"', 'Delete link is available.');
+
+    // Get test view data page.
+    $this->drupalGet('contact-view-data');
+    $this->assertText('Fam. Johnson');
 
     // Check listing page.
     $this->drupalGet('crm-core/contact');

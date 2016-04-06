@@ -29,6 +29,7 @@ use Drupal\crm_core_contact\ContactInterface;
  *     },
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\crm_core_contact\ContactListBuilder",
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *   },
  *   base_table = "crm_core_contact",
  *   revision_table = "crm_core_contact_revision",
@@ -52,8 +53,6 @@ use Drupal\crm_core_contact\ContactInterface;
  *     "delete-form" = "/crm-core/contact/{crm_core_contact}/delete"
  *   }
  * )
- *
- * @todo Add Views support.
  */
 class Contact extends ContentEntityBase implements ContactInterface {
 
