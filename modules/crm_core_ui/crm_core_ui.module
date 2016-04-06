@@ -57,21 +57,6 @@ function crm_core_ui_permission() {
 }
 
 /**
- * Implements hook_theme().
- */
-function crm_core_ui_theme() {
-  return array(
-    'crm_core_ui_ctools_dropbutton' => array(
-      'variables' => array(
-        'ops_count' => NULL,
-        'links' => array(),
-        'index' => NULL
-      )
-    )
-  );
-}
-
-/**
  * Implements hook_admin_paths().
  */
 function crm_core_ui_admin_paths() {
@@ -151,36 +136,6 @@ function crm_core_ui_ctools_add_dropbutton_files() {
   views_add_css('views-admin');
   views_add_css('views-admin.ctools');
   views_add_css('views-admin.seven');
-}
-
-/**
- * Theme function for operation links
- */
-function theme_crm_core_ui_ctools_dropbutton($variables) {
-  $output = '';
-
-  $ops_count = $variables['ops_count'];
-  $links = $variables['links'];
-  $index = $variables['index'];
-
-  if (is_array($links) && count($links)) {
-    $item_list = array();
-    for ($i = count($links) - $ops_count; $i < count($links); $i++) {
-      $item_list['items'][] = $links[$i];
-    }
-
-    $class = 'ctools-no-js ctools-dropbutton ctools-button';
-    $output .= '<div class="' . $class . '" id="ctools-button-' . $index . '">';
-    $output .= '<div class="ctools-link">';
-    $output .= '<a href="#" class="ctools-twisty ctools-text">' . t('open') . '</a>';
-    $output .= '</div>';
-    $output .= '<div class="ctools-content">';
-    $output .= theme('item_list', $item_list);
-    $output .= '</div>';
-    $output .= '</div>';
-  }
-
-  return $output;
 }
 
 /**

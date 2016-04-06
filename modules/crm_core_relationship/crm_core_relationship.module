@@ -322,9 +322,20 @@ function crm_core_relationship_preprocess_relationship(&$variables) {
   // add classes based on the type of relation
   $variables['classes_array'][] = 'relation';
   $variables['classes_array'][] = 'relation-' . $entity->relation_type;
+}
 
-  $variables['theme_hook_suggestions'][] = 'relationship__' . $entity->relation_type;
-  $variables['theme_hook_suggestions'][] = 'relationship__' . $entity->rid;
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function crm_core_relationship_theme_suggestions_relationship(array $variables) {
+  $suggestions = array();
+  $entity = $variables['relationship'];
+
+  // Add template suggestions.
+  $suggestions[] = 'relationship__' . $entity->relation_type;
+  $suggestions[] = 'relationship__' . $entity->rid;
+
+  return $suggestions;
 }
 
 /**

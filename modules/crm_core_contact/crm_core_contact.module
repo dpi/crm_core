@@ -7,16 +7,16 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\crm_core_contact\Entity\Contact;
+use Drupal\Core\Render\Element;
 
 /**
  * Implements hook_theme().
  */
-function crm_core_contact_theme($existing, $type, $theme, $path) {
+function crm_core_contact_theme() {
   return array(
-    'contact' => array(
+    'crm_core_contact' => array(
       'render element' => 'elements',
-      'template' => 'contact',
-      'path' => $path . '/templates',
+      'template' => 'crm-core-contact',
     ),
     'crm_core_contact_merge_table' => array(
       'render element' => 'table',
@@ -26,22 +26,49 @@ function crm_core_contact_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Process variables for contact.tpl.php.
+ * Process variables for CRM Core Contact.
+ *
+ * Default template: crm_core_contact.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - crm_core_contact: The CRM Core Contact entity.
+ */
+function template_preprocess_crm_core_contact(&$variables) {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  /** @var \Drupal\crm_core_contact\Entity\Contact $contact */
+  $contact = $variables['elements']['#crm_core_contact'];
+  $variables['crm_core_contact'] = $contact;
+
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+
+  // Add classes based on the type of contact.
+  $variables['attributes']['class'][] = 'crm_core_contact';
+  $variables['attributes']['class'][] = 'crm_core_contact-' . $contact->bundle();
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
  *
  * This function simply adds template suggestions for various
  * contact types.
  */
-function template_preprocess_contact(&$variables) {
-  $variables['view_mode'] = $variables['elements']['#view_mode'];
-  $variables['contact'] = $variables['elements']['#contact'];
-  $variables['content'] = $variables['elements']['#content'];
-
-  // Add classes based on the type of contact.
-  $variables['classes_array'][] = 'contact';
-  $variables['classes_array'][] = 'contact-' . $variables['contact']->type;
+function crm_core_contact_theme_suggestions_crm_core_contact(array $variables) {
+  $suggestions = array();
+  /** @var \Drupal\crm_core_contact\Entity\Contact $crm_core_contact */
+  $crm_core_contact = $variables['elements']['#crm_core_contact'];
+  $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
 
   // Add template suggestions.
-  $variables['theme_hook_suggestions'][] = 'contact__' . $variables['contact']->type;
+  $suggestions[] = 'crm_core_contact__' . $sanitized_view_mode;
+  $suggestions[] = 'crm_core_contact__' . $crm_core_contact->bundle();
+  $suggestions[] = 'crm_core_contact__' . $crm_core_contact->bundle() . '__' . $sanitized_view_mode;
+  $suggestions[] = 'crm_core_contact__' . $crm_core_contact->id();
+  $suggestions[] = 'crm_core_contact__' . $crm_core_contact->id() . '__' . $sanitized_view_mode;
+
+  return $suggestions;
 }
 
 /**
