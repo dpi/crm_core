@@ -25,4 +25,5 @@ class ActivityDeleteForm extends ContentEntityDeleteForm {
       '@type' => $entity->get('type')->entity->label(),
     ));
   }
+
 }

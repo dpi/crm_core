@@ -45,4 +45,5 @@ class ActivityTypeAccessControlHandler extends EntityAccessControlHandler {
         return AccessResult::allowed();
     }
   }
+
 }

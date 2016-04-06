@@ -23,10 +23,13 @@ use Drupal\field\Entity\FieldConfig;
  *     "access" = "Drupal\crm_core_activity\ActivityTypeAccessControlHandler",
  *     "form" = {
  *       "default" = "Drupal\crm_core_activity\Form\ActivityTypeForm",
- *       "delete" = "Drupal\crm_core_activity\Form\ActivityTypeDeleteForm",
+ *       "delete" = "Drupal\Core\Entity\EntityDeleteForm",
  *       "toggle" = "Drupal\crm_core_activity\Form\ActivityTypeToggleForm",
  *     },
  *     "list_builder" = "Drupal\crm_core_activity\ActivityTypeListBuilder",
+ *     "route_provider" = {
+ *       "html" = "Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider",
+ *     },
  *   },
  *   admin_permission = "administer activity types",
  *   entity_keys = {

@@ -51,15 +51,16 @@ class ActivityAccessControlHandler extends EntityAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL) {
-    $activity_type_is_active = empty($entity_bundle);
-
+    $activity_type_is_active = !empty($entity_bundle);
     // Load the activity type entity.
-    if (!empty($entity_bundle)) {
+    if ($activity_type_is_active) {
       /* @var \Drupal\crm_core_activity\Entity\ActivityType $activity_type_entity */
       $activity_type_entity = ActivityType::load($entity_bundle);
-      $activity_type_is_active = $activity_type_entity->status();
+      // @todo: Remove this checking after https://www.drupal.org/node/2696669.
+      if ($activity_type_entity) {
+        $activity_type_is_active = $activity_type_entity->status();
+      }
     }
-
     return AccessResult::allowedIf($activity_type_is_active)
       ->andIf(AccessResult::allowedIfHasPermissions($account, [
         'administer crm_core_activity entities',
@@ -67,4 +68,5 @@ class ActivityAccessControlHandler extends EntityAccessControlHandler {
         'create crm_core_activity entities of bundle ' . $entity_bundle,
       ], 'OR'));
   }
+
 }

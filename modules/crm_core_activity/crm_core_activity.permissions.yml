@@ -3,5 +3,9 @@ administer activity types:
   description: 'Allows users to configure activity types and their fields.'
   restrict access: true
 
+view crm dashboard:
+  title: 'View CRM dashboard'
+  description: 'Use dashboard.'
+
 permission_callbacks:
   - Drupal\crm_core_activity\ActivityPermissions::permissions
