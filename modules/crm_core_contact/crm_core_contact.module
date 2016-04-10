@@ -107,9 +107,8 @@ function crm_core_contact_action_info() {
  * Form builder for creating a household.
  */
 function crm_core_contact_join_into_household_action_form($context, &$form_state) {
-  module_load_include('inc', 'crm_core_contact_ui', 'crm_core_contact_ui.pages');
   $household = entity_create('crm_core_contact', array('type' => 'household'));
-  $form = crm_core_contact_ui_form(array(), $form_state, $household);
+  $form = crm_core_contact_form(array(), $form_state, $household);
 
   return $form;
 }

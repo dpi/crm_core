@@ -1,0 +1,33 @@
+entity.crm_core_contact.collection:
+  path: '/crm-core/contact'
+  defaults:
+    _title: 'Contacts'
+    _entity_list: 'crm_core_contact'
+  requirements:
+    _permission: 'view any crm_core_contact entity'
+
+entity.crm_core_contact_type.collection:
+  path: '/admin/structure/crm-core/contact-types'
+  defaults:
+    _title: 'Contact types'
+    _entity_list: 'crm_core_contact_type'
+  requirements:
+    _permission: 'administer contact types'
+
+entity.crm_core_contact_type.enable:
+  path: '/admin/structure/crm-core/contact-types/{crm_core_contact_type}/enable'
+  defaults:
+    _entity_form: 'crm_core_contact_type.toggle'
+    _title: 'Enable contact type'
+    op: 'enable'
+  requirements:
+    _entity_access: 'crm_core_contact_type.enable'
+
+entity.crm_core_contact_type.disable:
+  path: '/admin/structure/crm-core/contact-types/{crm_core_contact_type}/disable'
+  defaults:
+    _entity_form: 'crm_core_contact_type.toggle'
+    _title: 'Disable contact type'
+    op: 'disable'
+  requirements:
+    _entity_access: 'crm_core_contact_type.disable'

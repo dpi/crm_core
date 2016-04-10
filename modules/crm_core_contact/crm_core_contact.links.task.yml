@@ -1,5 +1,20 @@
+entity.crm_core_contact.canonical:
+  title: View
+  route_name: entity.crm_core_contact.canonical
+  base_route: entity.crm_core_contact.canonical
+
+entity.crm_core_contact.edit_form:
+  title: Edit
+  route_name: entity.crm_core_contact.edit_form
+  base_route: entity.crm_core_contact.canonical
+
 entity.crm_core_contact.delete_form:
   title: Delete
   route_name: entity.crm_core_contact.delete_form
   base_route: entity.crm_core_contact.canonical
   weight: 10
+
+entity.crm_core_contact_type.edit_form:
+  title: Edit
+  route_name: entity.crm_core_contact_type.edit_form
+  base_route: entity.crm_core_contact_type.edit_form

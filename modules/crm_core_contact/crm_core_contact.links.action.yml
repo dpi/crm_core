@@ -1,5 +1,5 @@
 crm_core_contact.add:
-  route_name: crm_core_contact.add_page
+  route_name: entity.crm_core_contact.add_page
   title: 'Add a contact'
   appears_on:
     - entity.crm_core_contact.collection

@@ -226,7 +226,7 @@ function crm_core_relationship_ui_add_relationship($contact) {
 
   $return = '';
   if (!empty($relationship_type_links)) {
-    $return = theme('crm_core_contact_ui_add_list', array('content' => $relationship_type_links));
+    $return = theme('crm_core_contact_add_list', array('content' => $relationship_type_links));
   }
 
   return $return;

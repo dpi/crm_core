@@ -30,6 +30,9 @@ use Drupal\crm_core_contact\ContactInterface;
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\crm_core_contact\ContactListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
+ *     "route_provider" = {
+ *       "html" = "Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider",
+ *     },
  *   },
  *   base_table = "crm_core_contact",
  *   revision_table = "crm_core_contact_revision",
@@ -47,6 +50,8 @@ use Drupal\crm_core_contact\ContactInterface;
  *     "plural" = @Translation("Contacts"),
  *   },
  *   links = {
+ *     "add-page" = "/crm-core/contact/add",
+ *     "add-form" = "/crm-core/contact/add/{crm_core_contact_type}",
  *     "canonical" = "/crm-core/contact/{crm_core_contact}",
  *     "collection" = "/crm-core/contact",
  *     "edit-form" = "/crm-core/contact/{crm_core_contact}/edit",

@@ -7,6 +7,7 @@
 namespace Drupal\crm_core_contact\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Entity\EntityDescriptionInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\crm_core_contact\ContactTypeInterface;
@@ -27,6 +28,9 @@ use Drupal\crm_core_contact\ContactTypeInterface;
  *       "toggle" = "Drupal\crm_core_contact\Form\ContactTypeToggleForm",
  *     },
  *     "list_builder" = "Drupal\crm_core_contact\ContactTypeListBuilder",
+ *     "route_provider" = {
+ *       "html" = "Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider",
+ *     },
  *   },
  *   admin_permission = "administer contact types",
  *   entity_keys = {
@@ -50,7 +54,7 @@ use Drupal\crm_core_contact\ContactTypeInterface;
  *   }
  * )
  */
-class ContactType extends ConfigEntityBundleBase implements ContactTypeInterface {
+class ContactType extends ConfigEntityBundleBase implements ContactTypeInterface, EntityDescriptionInterface {
 
   /**
    * The machine-readable name of this type.
@@ -162,6 +166,21 @@ class ContactType extends ConfigEntityBundleBase implements ContactTypeInterface
       return $contact_type->label();
     }, $contact_types);
     return $contact_types;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescription() {
+    return $this->description;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setDescription($description) {
+    $this->description = $description;
+    return $this;
   }
 
 }

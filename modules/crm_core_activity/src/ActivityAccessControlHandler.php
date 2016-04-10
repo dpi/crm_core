@@ -56,10 +56,7 @@ class ActivityAccessControlHandler extends EntityAccessControlHandler {
     if ($activity_type_is_active) {
       /* @var \Drupal\crm_core_activity\Entity\ActivityType $activity_type_entity */
       $activity_type_entity = ActivityType::load($entity_bundle);
-      // @todo: Remove this checking after https://www.drupal.org/node/2696669.
-      if ($activity_type_entity) {
-        $activity_type_is_active = $activity_type_entity->status();
-      }
+      $activity_type_is_active = $activity_type_entity->status();
     }
     return AccessResult::allowedIf($activity_type_is_active)
       ->andIf(AccessResult::allowedIfHasPermissions($account, [

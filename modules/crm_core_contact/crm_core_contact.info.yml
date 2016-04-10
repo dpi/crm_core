@@ -5,13 +5,14 @@ package: CRM Core
 version: 8.x-1.x-dev
 core: 8.x
 
+configure: entity.crm_core_contact_type.collection
+
 dependencies:
   # Core dependencies
-  - crm_core
+  - crm_core_ui
 
   # Contrib dependencies
   - field_ui
-  - views
   - text
 
 test_dependencies:

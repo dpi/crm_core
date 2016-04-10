@@ -23,7 +23,7 @@ class ActivityUiTest extends WebTestBase {
    * @var array
    */
   public static $modules = array(
-    'crm_core_contact_ui',
+    'crm_core_contact',
     'crm_core_activity',
     'crm_core_tests',
   );

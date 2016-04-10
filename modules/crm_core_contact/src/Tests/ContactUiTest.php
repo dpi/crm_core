@@ -1,16 +1,16 @@
 <?php
 /**
  * @file
- * Contains \Drupal\crm_core_contact_ui\Tests\ContactUiTest;
+ * Contains \Drupal\crm_core_contact\Tests\ContactUiTest.
  */
 
-namespace Drupal\crm_core_contact_ui\Tests;
+namespace Drupal\crm_core_contact\Tests;
 
 use Drupal\crm_core_contact\Entity\Contact;
 use Drupal\simpletest\WebTestBase;
 
 /**
- * Tests the UI for Contact CRUD operations
+ * Tests the UI for Contact CRUD operations.
  *
  * @group crm_core
  */
@@ -22,10 +22,8 @@ class ContactUiTest extends WebTestBase {
    * @var array
    */
   public static $modules = array(
-    'text',
     'crm_core_contact',
     'crm_core_activity',
-    'crm_core_contact_ui',
     'crm_core_tests',
   );
 
@@ -52,20 +50,26 @@ class ContactUiTest extends WebTestBase {
    */
   public function testContactOperations() {
     // Create user and login.
-    $user = $this->drupalCreateUser(array('administer crm_core_contact entities', 'view any crm_core_contact entity'));
+    $user = $this->drupalCreateUser(array(
+      'create crm_core_contact entities of bundle household',
+      'create crm_core_contact entities of bundle organization',
+      'view any crm_core_contact entity',
+    ));
     $this->drupalLogin($user);
 
-    // There should be no contacts available after fresh installation and
-    // there is link to create new contacts.
+    // There should be no contacts available after fresh installation and there
+    // is a link to create new contacts.
     $this->drupalGet('crm-core/contact');
     $this->assertText(t('There are no contacts available. Add one now.'), 'No contacts available after fresh installation.');
     $this->assertLink(t('Add a contact'));
 
-    // Open page crm-core/contact/add and assert standard contact types available.
+    // Assert "Household" and "Organization" contact types are available.
     $this->drupalGet('crm-core/contact/add');
-    $this->assertLink(t('Add Household'));
-    $this->assertLink(t('Add Individual'));
-    $this->assertLink(t('Add Organization'));
+    $this->assertLink(t('Household'));
+    $this->assertLink(t('Organization'));
+    $this->assertNoLinkByHref('crm-core/contact/add/individual', 'User has no permission to create Individual contacts.');
+    $this->drupalGet('crm-core/contact/add/individual');
+    $this->assertResponse(403);
 
     // Create Household contact.
     $household_node = array(
@@ -80,6 +84,8 @@ class ContactUiTest extends WebTestBase {
     $this->assertText(t('Household'), 'Newly created contact type listed.');
 
     // Create individual contact.
+    $user = $this->drupalCreateUser(array('administer crm_core_contact entities', 'administer contact types', 'view any crm_core_contact entity'));
+    $this->drupalLogin($user);
     $individual_node = array(
       'name[0][value]' => 'Smith',
 //      'name[und][0][title]' => 'Mr.',
@@ -231,7 +237,7 @@ class ContactUiTest extends WebTestBase {
     // And I should not see a disable link.
     $this->assertNoContactTypeLink('household/disable', 'No disable link for household.');
 
-    // When I enable 'household'
+    // When I enable 'household'.
     $this->drupalPostForm('admin/structure/crm-core/contact-types/household/enable', array(), 'Enable');
 
     // Then I should see a disable link.

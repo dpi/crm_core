@@ -75,4 +75,5 @@ class ContactAccessControlHandler extends EntityAccessControlHandler {
         'create crm_core_contact entities of bundle ' . $entity_bundle,
       ], 'OR'));
   }
+
 }
