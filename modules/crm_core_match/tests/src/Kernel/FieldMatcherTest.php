@@ -1,15 +1,11 @@
 <?php
-/**
- * @file
- * Contains \Drupal\crm_core_match\Tests\FieldMatcherTest.
- */
 
-namespace Drupal\crm_core_match\Tests;
+namespace Drupal\Tests\crm_core_match\Kernel;
 
 use Drupal\crm_core_contact\Entity\Contact;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\simpletest\KernelTestBase;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Tests the field matchers of the default matching engine.

@@ -1,16 +1,12 @@
 <?php
-/**
- * @file
- * Contains \Drupal\crm_core_contact\Tests\ContactCRUDTest.
- */
 
-namespace Drupal\crm_core_contact\Tests;
+namespace Drupal\Tests\crm_core_contact\Kernel;
 
 use Drupal\crm_core_activity\Entity\Activity;
 use Drupal\crm_core_activity\Entity\ActivityType;
 use Drupal\crm_core_contact\Entity\Contact;
 use Drupal\crm_core_contact\Entity\ContactType;
-use Drupal\simpletest\KernelTestBase;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Tests CRUD operations for the CRM Core Contact entity.
