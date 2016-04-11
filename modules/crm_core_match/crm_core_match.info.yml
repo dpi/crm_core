@@ -9,3 +9,6 @@ configure: crm_core_match.match
 
 dependencies:
   - crm_core_contact
+
+test_dependencies:
+  - name
