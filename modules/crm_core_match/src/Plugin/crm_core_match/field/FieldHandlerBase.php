@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crm_core_match\Plugin\crm_core_match\field\FieldHandlerBase.
- */
-
 namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
 
 use Drupal\Core\Entity\Query\QueryFactory;

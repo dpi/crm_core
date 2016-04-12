@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crm_core_match\Plugin\crm_core_match\field\Text.
- */
-
 namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
 
 /**
@@ -14,7 +9,7 @@ namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
  *   id = "text"
  * )
  */
-class Text extends FieldHandlerBase {
+class TextFieldHandler extends FieldHandlerBase {
 
   /**
    * {@inheritdoc}
@@ -27,4 +22,5 @@ class Text extends FieldHandlerBase {
       'CONTAINS' => t('Contains'),
     );
   }
+
 }

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Implementation of FieldHandlerInterface for email fields.
- */
-
 namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
 
 /**
@@ -14,7 +9,7 @@ namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
  *   id = "email"
  * )
  */
-class Email extends FieldHandlerBase {
+class EmailFieldHandler extends FieldHandlerBase {
 
   /**
    * {@inheritdoc}
@@ -24,4 +19,5 @@ class Email extends FieldHandlerBase {
       '=' => t('Equals'),
     );
   }
+
 }

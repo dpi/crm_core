@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crm_core_match\Plugin\crm_core_match\field\FieldHandlerInterface.
- */
-
 namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
 
 use Drupal\crm_core_contact\ContactInterface;

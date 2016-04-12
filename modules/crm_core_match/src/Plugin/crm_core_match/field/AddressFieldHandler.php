@@ -1,18 +1,13 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\crm_core_match\Plugin\crm_core_match\field\AddressFieldMatchField.
- */
-
 namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
 
 /**
- * Class for evaluating addressfield fields.
+ * Class for evaluating address field fields.
  *
  * Implementation of FieldHandlerInterface for address field.
  */
-class AddressFieldMatchField extends FieldHandlerBase {
+class AddressFieldHandler extends FieldHandlerBase {
 
   /**
    * This function is going to add all addressfield components..
@@ -46,7 +41,7 @@ class AddressFieldMatchField extends FieldHandlerBase {
       $field_item['field_item'] = $item;
 
       if (in_array($item, $select_items)) {
-        $item = new selectMatchField();
+        $item = new SelectFieldHandler();
         $item->fieldRender($field_item, $field_info, $form);
       }
       if (in_array($item, $text_items)) {
@@ -55,4 +50,14 @@ class AddressFieldMatchField extends FieldHandlerBase {
       }
     }
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOperators($property = 'value') {
+    return array(
+      'equals' => t('Equals'),
+    );
+  }
+
 }

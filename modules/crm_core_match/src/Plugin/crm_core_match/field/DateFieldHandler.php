@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Implementation of FieldHandlerInterface for date fields.
- */
-
 namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
 
 use Drupal\crm_core_contact\ContactInterface;
@@ -12,21 +7,12 @@ use Drupal\crm_core_contact\ContactInterface;
 /**
  * Class for evaluating date fields.
  */
-class DateMatchField extends FieldHandlerBase {
+class DateFieldHandler extends FieldHandlerBase {
 
   /**
-   * Defines logical operators to use with this field.
-   *
-   * This operators would be interpreted in fieldQuery() method.
-   *
-   * @param array $field_info
-   *   Array returned by field_info_field($field_name).
-   *
-   * @return array
-   *   Assoc array of operators.
+   * {@inheritdoc}
    */
-  public function operators($field_info = NULL) {
-
+  public function getOperators($property = 'value') {
     $operators = array(
       '=' => t('Equals'),
       '>=' => t('Greater than'),
@@ -58,16 +44,17 @@ class DateMatchField extends FieldHandlerBase {
 
     return isset($results['crm_core_contact']) ? array_keys($results['crm_core_contact']) : $results;
   }
+
 }
 
 /**
  * Just extender of DateMatchField to catch field type.
  */
-class DateTimeMatchField extends DateMatchField {
+class DateTimeFieldHandler extends DateFieldHandler {
 }
 
 /**
  * Just extender of DateMatchField to catch field type.
  */
-class DateStampMatchField extends DateMatchField {
+class DateStampFieldHandler extends DateFieldHandler {
 }

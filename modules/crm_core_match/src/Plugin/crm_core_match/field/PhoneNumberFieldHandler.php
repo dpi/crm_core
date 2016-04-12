@@ -1,16 +1,11 @@
 <?php
 
-/**
- * @file
- * Implementation of FieldHandlerInterface for phone_number field.
- */
-
 namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
 
 /**
  * Class for evaluating phone_number fields.
  */
-class Phone_NumberMatchField extends FieldHandlerBase {
+class PhoneNumberFieldHandler extends FieldHandlerBase {
 
   /**
    * @see DefaultMatchingEngineFieldType::fieldRender()
@@ -36,8 +31,18 @@ class Phone_NumberMatchField extends FieldHandlerBase {
       $field_item['bundle'] = $field['bundle'];
       $field_item['field_item'] = $item;
 
-      $item = new selectMatchField();
+      $item = new SelectFieldHandler();
       $item->fieldRender($field_item, $field_info, $form);
     }
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOperators($property = 'value') {
+    return array(
+      'equals' => t('Equals'),
+    );
+  }
+
 }

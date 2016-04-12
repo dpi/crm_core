@@ -1,9 +1,4 @@
 <?php
-/**
- * @file
- * Contains
- *   \Drupal\crm_core_match\Plugin\crm_core_match\field\String.
- */
 
 namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
 
@@ -14,6 +9,6 @@ namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
  *   id = "string"
  * )
  */
-class String extends Text {
+class StringFieldHandler extends TextFieldHandler {
 
 }

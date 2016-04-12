@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crm_core_match\Plugin\crm_core_match\field\Name.
- */
-
 namespace Drupal\crm_core_match\Plugin\crm_core_match\field;
 
 use Drupal\crm_core_contact\ContactInterface;
@@ -17,7 +12,7 @@ use Drupal\field\FieldConfigInterface;
  *   id = "name"
  * )
  */
-class Name extends FieldHandlerBase {
+class NameFieldHandler extends FieldHandlerBase {
 
   /**
    * {@inheritdoc}
