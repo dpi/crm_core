@@ -4,24 +4,3 @@
  * @file
  * Provides an entity for recording a contact's activities.
  */
-
-/**
- * Implements hook_forms().
- *
- * Create form for adding/editing crm_activity.
- * Their id is like 'crm_activity_edit_' . $bundle . '_form'.
- *
- * @see entity_ui_get_form()
- */
-function crm_core_activity_forms($form_id, $args) {
-  $forms = array();
-
-  // Check whether it is crm_activity form.
-  if (strpos($form_id, 'crm_core_activity_edit_') === 0) {
-    $forms[$form_id] = array(
-      'callback' => 'crm_core_activity_form',
-    );
-  }
-
-  return $forms;
-}
