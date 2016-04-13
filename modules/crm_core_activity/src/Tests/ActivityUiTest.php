@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crm_core_activity\Tests\ActivityUiTest.
- */
-
 namespace Drupal\crm_core_activity\Tests;
 
 use Drupal\crm_core_contact\Entity\Contact;
@@ -79,6 +74,8 @@ class ActivityUiTest extends WebTestBase {
     // $this->assertLink(t('Phone call'));
 
     // Create Meeting activity. Ensure it is listed.
+    $this->drupalGet('crm-core/activity/add/meeting');
+    $this->assertText(t('Format: @date', ['@date' => date('Y-m-d H:i')]));
     $meeting_activity = array(
       'title[0][value]' => 'Pellentesque',
       'activity_date[0][value][date]' => $this->randomDate(),
@@ -93,7 +90,7 @@ class ActivityUiTest extends WebTestBase {
     // @todo: Uncomment after https://www.drupal.org/node/2696669.
     // $this->assertLink(t('Activities'));
 
-    $this->drupalPostForm('crm-core/activity/add/meeting', $meeting_activity, 'Save Activity');
+    $this->drupalPostForm(NULL, $meeting_activity, 'Save Activity');
     $this->assertText('Activity Pellentesque created.', 'No errors after adding new activity.');
 
     // Create Meeting activity. Ensure it it listed.

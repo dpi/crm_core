@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains Drupal\crm_core_activity\Entity\Activity.
- */
 
 namespace Drupal\crm_core_activity\Entity;
 
@@ -131,10 +127,10 @@ class Activity extends ContentEntityBase implements ActivityInterface {
       ->setDescription(t('The time that the activity was created.'))
       ->setRevisionable(TRUE)
       ->setDisplayOptions('form', array(
-        'type' => 'number',
+        'type' => 'datetime_timestamp',
         'weight' => -5,
       ))
-      ->setDisplayConfigurable('form', TRUE);;
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
