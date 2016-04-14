@@ -66,12 +66,11 @@ class ActivityUiTest extends WebTestBase {
     $this->drupalGet('crm-core/activity');
     $this->assertText(t('There are no activities available.'), 'No activities available.');
 
-    // @todo: Uncomment after https://www.drupal.org/node/2696669.
-    // $this->assertLink(t('Add an activity'));
-    // $this->drupalGet('crm-core/activity/add');
+    $this->assertLink(t('Add an activity'));
+    $this->drupalGet('crm-core/activity/add');
 
-    // $this->assertLink(t('Meeting'));
-    // $this->assertLink(t('Phone call'));
+    $this->assertLink(t('Meeting'));
+    $this->assertLink(t('Phone call'));
 
     // Create Meeting activity. Ensure it is listed.
     $this->drupalGet('crm-core/activity/add/meeting');
@@ -87,8 +86,7 @@ class ActivityUiTest extends WebTestBase {
     // Assert the breadcrumb.
     $this->assertLink(t('Home'));
     $this->assertLink(t('CRM Core'));
-    // @todo: Uncomment after https://www.drupal.org/node/2696669.
-    // $this->assertLink(t('Activities'));
+    $this->assertLink(t('Activities'));
 
     $this->drupalPostForm(NULL, $meeting_activity, 'Save Activity');
     $this->assertText('Activity Pellentesque created.', 'No errors after adding new activity.');
