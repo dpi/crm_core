@@ -2,7 +2,7 @@ entity.crm_core_contact.collection:
   title: 'CRM Contacts'
   description: 'Manage CRM Contacts.'
   route_name: entity.crm_core_contact.collection
-  parent: crm_core.dashboard
+  parent: crm_core.overview
 
 entity.crm_core_contact_type.collection:
   title: 'CRM Contact Types'

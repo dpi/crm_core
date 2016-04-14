@@ -9,7 +9,7 @@ configure: entity.crm_core_contact_type.collection
 
 dependencies:
   # Core dependencies
-  - crm_core_ui
+  - crm_core
 
   # Contrib dependencies
   - field_ui

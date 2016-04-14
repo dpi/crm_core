@@ -25,6 +25,7 @@ class ContactUiTest extends WebTestBase {
     'crm_core_contact',
     'crm_core_activity',
     'crm_core_tests',
+    'block'
   );
 
   /**
@@ -54,12 +55,18 @@ class ContactUiTest extends WebTestBase {
       'create crm_core_contact entities of bundle household',
       'create crm_core_contact entities of bundle organization',
       'view any crm_core_contact entity',
+      'view crm overview',
     ));
     $this->drupalLogin($user);
 
+    $this->drupalGet('crm-core');
+    $this->assertTitle(t('CRM Core | Drupal'));
+
+    $this->assertLink(t('CRM Activities'));
+    $this->assertLink(t('CRM Contacts'));
+    $this->clickLink(t('CRM Contacts'));
     // There should be no contacts available after fresh installation and there
     // is a link to create new contacts.
-    $this->drupalGet('crm-core/contact');
     $this->assertText(t('There are no contacts available. Add one now.'), 'No contacts available after fresh installation.');
     $this->assertLink(t('Add a contact'));
 
