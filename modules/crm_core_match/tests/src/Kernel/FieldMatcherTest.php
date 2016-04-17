@@ -23,6 +23,8 @@ class FieldMatcherTest extends KernelTestBase {
     'text',
     'crm_core_contact',
     'crm_core_match',
+    'views',
+    'system',
   );
 
   /**
@@ -39,6 +41,7 @@ class FieldMatcherTest extends KernelTestBase {
     parent::setUp();
 
     $this->installConfig(['crm_core_contact']);
+    $this->installEntitySchema('action');
     $this->installEntitySchema('crm_core_contact');
 
     $this->pluginManager = $this->container->get('plugin.manager.crm_core_match.match_field');

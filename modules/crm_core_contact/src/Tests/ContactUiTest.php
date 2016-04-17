@@ -67,7 +67,7 @@ class ContactUiTest extends WebTestBase {
     $this->clickLink(t('CRM Contacts'));
     // There should be no contacts available after fresh installation and there
     // is a link to create new contacts.
-    $this->assertText(t('There are no contacts available. Add one now.'), 'No contacts available after fresh installation.');
+    $this->assertText(t('There are no contacts available.'), 'No contacts available after fresh installation.');
     $this->assertLink(t('Add a contact'));
 
     // Assert "Household" and "Organization" contact types are available.
@@ -109,6 +109,26 @@ class ContactUiTest extends WebTestBase {
 
     $this->assertLink('Smith', 0, 'Newly created contact title listed.');
     $this->assertText(t('Individual'), 'Newly created contact type listed.');
+
+    // Assert all view headers are available.
+    $this->assertLink('Name');
+    $this->assertLink('Contact Type');
+    $this->assertLink('Updated');
+    $this->assertText('Operations links');
+
+    $count = $this->xpath('//form[@class="views-exposed-form"]/div/div/label[text()="Name"]');
+    $this->assertTrue($count, 1, 'Title is an exposed filter.');
+
+    $count = $this->xpath('//form[@class="views-exposed-form"]/div/div/label[text()="Type"]');
+    $this->assertTrue($count, 1, 'Contact type is an exposed filter.');
+
+    $contacts = \Drupal::entityTypeManager()->getStorage('crm_core_contact')->loadByProperties(['name' => 'Fam. Smith']);
+    $contact = current($contacts);
+
+    $this->assertRaw('crm-core/contact/' . $contact->id() . '/edit', 'Edit link is available.');
+    $this->assertRaw('crm-core/contact/' . $contact->id() . '/delete', 'Delete link is available.');
+
+    $this->assertText($this->container->get('date.formatter')->format($contact->get('changed')->value, 'medium'), 'Contact updated date is available.');
 
     // Create Organization contact.
     $organization_node = array(
@@ -199,7 +219,7 @@ class ContactUiTest extends WebTestBase {
     $this->assertNoLink('Another Example ltd', 0, 'Deleted contact title no more listed.');
 
     // Assert that there are no contacts left.
-    $this->assertText(t('There are no contacts available. Add one now.'), 'No contacts available after fresh installation.');
+    $this->assertText(t('There are no contacts available.'), 'No contacts available after fresh installation.');
   }
 
   /**

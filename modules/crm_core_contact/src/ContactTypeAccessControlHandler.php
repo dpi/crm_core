@@ -41,6 +41,7 @@ class ContactTypeAccessControlHandler extends EntityAccessControlHandler {
         return AccessResult::allowedIf(empty($results));
 
       // @todo Which is it?
+      case 'view':
       case 'edit':
       case 'update':
         // If the contact type is locked, you can't edit it.

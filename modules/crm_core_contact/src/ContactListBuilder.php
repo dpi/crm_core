@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crm_core_contact\ContactListBuilder.
- */
-
 namespace Drupal\crm_core_contact;
 
 use Drupal\Core\Datetime\DateFormatter;
@@ -103,3 +98,4 @@ class ContactListBuilder extends EntityListBuilder {
   }
 
 }
+
