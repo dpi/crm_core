@@ -54,6 +54,7 @@ class ActivityUiTest extends WebTestBase {
       'view any crm_core_contact entity',
       'administer crm_core_activity entities',
       'administer activity types',
+      'view any crm_core_activity entity',
     ));
     $this->drupalLogin($user);
 
@@ -112,6 +113,27 @@ class ActivityUiTest extends WebTestBase {
     $this->assertText('Vestibulum', 'Activity updated.');
     $this->drupalGet('crm-core/activity');
     $this->assertLink('Vestibulum', 0, 'Updated activity listed properly.');
+
+    // Assert all views headers are available.
+    $this->assertLink(t('Activity Date'));
+    $this->assertLink(t('Title'));
+    $this->assertLink(t('Activity Type'));
+    $this->assertText(t('Operations'));
+
+    $count = $this->xpath('//form[@class="views-exposed-form"]/div/div/label[text()="Title"]');
+    $this->assertTrue($count, 1, 'Title is an exposed filter.');
+
+    $count = $this->xpath('//form[@class="views-exposed-form"]/div/div/label[text()="Type"]');
+    $this->assertTrue($count, 1, 'Activity type is an exposed filter.');
+
+    $activities = \Drupal::entityTypeManager()->getStorage('crm_core_activity')->loadByProperties(['title' => 'Vestibulum']);
+    $activity = current($activities);
+
+    $this->assertRaw('crm-core/activity/' . $activity->id() . '/edit', 'Edit link is available.');
+    $this->assertRaw('crm-core/activity/' . $activity->id() . '/delete', 'Delete link is available.');
+    $date = $activity->get('activity_date')->date;
+    $this->container->get('date.formatter')->format($date->getTimeStamp(), 'medium');
+    $this->assertText($this->container->get('date.formatter')->format($date->getTimeStamp(), 'medium'), 'Activity date is available.');
 
     // Get test view page and check fields data.
     $this->drupalGet('activity-view-data');

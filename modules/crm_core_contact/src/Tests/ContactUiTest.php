@@ -56,6 +56,7 @@ class ContactUiTest extends WebTestBase {
       'create crm_core_contact entities of bundle organization',
       'view any crm_core_contact entity',
       'view crm overview',
+      'view any crm_core_activity entity',
     ));
     $this->drupalLogin($user);
 

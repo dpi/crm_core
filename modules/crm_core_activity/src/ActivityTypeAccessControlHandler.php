@@ -41,6 +41,7 @@ class ActivityTypeAccessControlHandler extends EntityAccessControlHandler {
 
         return AccessResult::allowedIf($count == 0);
 
+      case 'view':
       case 'update':
         return AccessResult::allowed();
     }
