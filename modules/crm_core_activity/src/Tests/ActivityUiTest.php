@@ -59,10 +59,14 @@ class ActivityUiTest extends WebTestBase {
     $this->drupalLogin($user);
 
     // Create Household contact.
-    $household = Contact::create(array(
-      'name' => 'Fam. Smith',
+    // @todo update when Contact is split into different entities.
+    $household = Contact::create([
+      'name' => [
+        'given' => 'John',
+        'family' => 'Smith',
+      ],
       'type' => 'household',
-    ));
+    ]);
     $household->save();
 
     $this->drupalGet('crm-core/activity');

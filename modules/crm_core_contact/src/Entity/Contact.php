@@ -94,18 +94,18 @@ class Contact extends ContentEntityBase implements ContactInterface {
         'default_value' => 0,
       ));
 
-    // @todo Make this a name field once it gets available.
-    $fields['name'] = BaseFieldDefinition::create('string')
+    $fields['name'] = BaseFieldDefinition::create('name')
       ->setLabel(t('Name'))
-      ->setDisplayOptions('form', array(
-        'type' => 'text_textfield',
+      ->setDescription(t('Name of the contact.'))
+      ->setDisplayOptions('form', [
+        'type' => 'name_default',
         'weight' => 0,
-      ))
-      ->setDisplayOptions('view', array(
+      ])
+      ->setDisplayOptions('view', [
         'label' => 'hidden',
-        'type' => 'string',
+        'type' => 'name_default',
         'weight' => 0,
-      ))
+      ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
@@ -256,8 +256,8 @@ class Contact extends ContentEntityBase implements ContactInterface {
    * {@inheritdoc}
    */
   public function label() {
-    // @todo Replace with the value of the contact_name field, when name module will be available.
-    $label = $this->get('name')->value;
+    $name_values = $this->get('name')->first()->getValue();
+    $label = trim($name_values['given'] . ' ' . $name_values['family']);
     if (empty($label)) {
       $label = t('Nameless #@id', ['@id' => $this->id()]);
     }

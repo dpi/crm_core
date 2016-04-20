@@ -28,6 +28,7 @@ class ContactCRUDTest extends KernelTestBase {
     'crm_core_contact',
     'crm_core_activity',
     'datetime',
+    'name',
   );
 
   /**

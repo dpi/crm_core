@@ -21,12 +21,12 @@ class ContactUiTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array(
+  public static $modules = [
     'crm_core_contact',
     'crm_core_activity',
     'crm_core_tests',
     'block'
-  );
+  ];
 
   /**
    * {@inheritdoc}
@@ -80,35 +80,40 @@ class ContactUiTest extends WebTestBase {
     $this->assertResponse(403);
 
     // Create Household contact.
-    $household_node = array(
-      'name[0][value]' => 'Fam. Smith',
-    );
+    // @todo update these values when contact is split into different entities.
+    $household_node = [
+      'name[0][title]' => '',
+      'name[0][given]' => 'Gregory',
+      'name[0][middle]' => '',
+      'name[0][family]' => 'House',
+      'name[0][generational]' => '',
+      'name[0][credentials]' => '',
+    ];
     $this->drupalPostForm('crm-core/contact/add/household', $household_node, 'Save Household');
 
     // Assert we were redirected back to the list of contacts.
     $this->assertUrl('crm-core/contact');
 
-    $this->assertLink('Fam. Smith', 0, 'Newly created contact title listed.');
+    $this->assertText('Gregory House', 0, 'Newly created contact title listed.');
     $this->assertText(t('Household'), 'Newly created contact type listed.');
 
     // Create individual contact.
     $user = $this->drupalCreateUser(array('administer crm_core_contact entities', 'administer contact types', 'view any crm_core_contact entity'));
     $this->drupalLogin($user);
-    $individual_node = array(
-      'name[0][value]' => 'Smith',
-//      'name[und][0][title]' => 'Mr.',
-//      'name[und][0][given]' => 'John',
-//      'name[und][0][middle]' => 'Emanuel',
-//      'name[und][0][family]' => 'Smith,
-//      'name[und][0][generational]' => 'IV',
-//      'name[und][0][credentials]' => '',
-    );
+    $individual_node = [
+      'name[0][title]' => 'Mr.',
+      'name[0][given]' => 'John',
+      'name[0][middle]' => 'Emanuel',
+      'name[0][family]' => 'Smith',
+      'name[0][generational]' => 'IV',
+      'name[0][credentials]' => '',
+    ];
     $this->drupalPostForm('crm-core/contact/add/individual', $individual_node, 'Save Individual');
 
     // Assert we were redirected back to the list of contacts.
     $this->assertUrl('crm-core/contact');
 
-    $this->assertLink('Smith', 0, 'Newly created contact title listed.');
+    $this->assertText('John Smith', 0, 'Newly created contact title listed.');
     $this->assertText(t('Individual'), 'Newly created contact type listed.');
 
     // Assert all view headers are available.
@@ -117,13 +122,16 @@ class ContactUiTest extends WebTestBase {
     $this->assertLink('Updated');
     $this->assertText('Operations links');
 
-    $count = $this->xpath('//form[@class="views-exposed-form"]/div/div/label[text()="Name"]');
-    $this->assertTrue($count, 1, 'Title is an exposed filter.');
+    $count = $this->xpath('//form[@class="views-exposed-form"]/div/div/label[text()="Name (given)"]');
+    $this->assertTrue($count, 1, 'Name given is an exposed filter.');
+
+    $count = $this->xpath('//form[@class="views-exposed-form"]/div/div/label[text()="Name (family)"]');
+    $this->assertTrue($count, 1, 'Name given is an exposed filter.');
 
     $count = $this->xpath('//form[@class="views-exposed-form"]/div/div/label[text()="Type"]');
     $this->assertTrue($count, 1, 'Contact type is an exposed filter.');
 
-    $contacts = \Drupal::entityTypeManager()->getStorage('crm_core_contact')->loadByProperties(['name' => 'Fam. Smith']);
+    $contacts = \Drupal::entityTypeManager()->getStorage('crm_core_contact')->loadByProperties(['name__given' => 'John', 'name__family' => 'Smith']);
     $contact = current($contacts);
 
     $this->assertRaw('crm-core/contact/' . $contact->id() . '/edit', 'Edit link is available.');
@@ -132,24 +140,36 @@ class ContactUiTest extends WebTestBase {
     $this->assertText($this->container->get('date.formatter')->format($contact->get('changed')->value, 'medium'), 'Contact updated date is available.');
 
     // Create Organization contact.
-    $organization_node = array(
-      'name[0][value]' => 'Example ltd',
-    );
+    // @todo update these values when contact is split into different entities.
+    $organization_node = [
+      'name[0][title]' => '',
+      'name[0][given]' => 'Example',
+      'name[0][middle]' => '',
+      'name[0][family]' => 'ltd',
+      'name[0][generational]' => '',
+      'name[0][credentials]' => '',
+    ];
     $this->drupalPostForm('crm-core/contact/add/organization', $organization_node, 'Save Organization');
 
     // Assert we were redirected back to the list of contacts.
     $this->assertUrl('crm-core/contact');
 
-    $this->assertLink('Example ltd', 0, 'Newly created contact title listed.');
+    $this->assertText('Example ltd', 0, 'Newly created contact title listed.');
     $this->assertText(t('Organization'), 'Newly created contact type listed.');
 
     // Edit operations.
     // We know that created nodes household is id 1, individual is no 2,
     // organization is no 3. But we should have better API to find contact by
     // name.
-    $household_node = array(
-      'name[0][value]' => 'Fam. Johnson',
-    );
+    // @todo update these values when contact is split into different entities.
+    $household_node = [
+      'name[0][title]' => '',
+      'name[0][given]' => 'Fam.',
+      'name[0][middle]' => '',
+      'name[0][family]' => 'Johnson',
+      'name[0][generational]' => '',
+      'name[0][credentials]' => '',
+    ];
     $this->drupalPostForm('crm-core/contact/1/edit', $household_node, 'Save Household');
 
     // Assert we were redirected back to the list of contacts.
@@ -169,7 +189,7 @@ class ContactUiTest extends WebTestBase {
 
     // Check listing page.
     $this->drupalGet('crm-core/contact');
-    $this->assertLink('Fam. Johnson', 0, 'Updated contact title listed.');
+    $this->assertText('Fam. Johnson', 0, 'Updated contact title listed.');
 
     // Delete household contact.
     $this->drupalPostForm('crm-core/contact/1/delete', array(), t('Delete'));
@@ -177,15 +197,14 @@ class ContactUiTest extends WebTestBase {
     $this->assertNoLink('Fam. Johnson', 0, 'Deleted contact title no more listed.');
 
     // Edit individual contact.
-    $individual_node = array(
-      'name[0][value]' => 'Johnson',
-//      'name[und][0][title]' => 'Mr.',
-//      'name[und][0][given]' => 'John',
-//      'name[und][0][middle]' => 'Emanuel',
-//      'name[und][0][family]' => 'Smith,
-//      'name[und][0][generational]' => 'IV',
-//      'name[und][0][credentials]' => '',
-    );
+    $individual_node = [
+      'name[0][title]' => 'Mr.',
+      'name[0][given]' => 'Maynard',
+      'name[0][middle]' => 'James',
+      'name[0][family]' => 'Keenan',
+      'name[0][generational]' => 'I',
+      'name[0][credentials]' => 'MJK',
+    ];
     $this->drupalPostForm('crm-core/contact/2/edit', $individual_node, 'Save Individual');
 
     // Assert we were redirected back to the list of contacts.
@@ -193,7 +212,7 @@ class ContactUiTest extends WebTestBase {
 
     // Check listing page.
     $this->drupalGet('crm-core/contact');
-    $this->assertLink('Johnson', 0, 'Updated individual contact title listed.');
+    $this->assertText('Maynard Keenan', 0, 'Updated individual contact title listed.');
 
     // Delete individual contact.
     $this->drupalPostForm('crm-core/contact/2/delete', array(), t('Delete'));
@@ -201,9 +220,15 @@ class ContactUiTest extends WebTestBase {
     $this->assertNoLink('Johnson', 0, 'Deleted individual contact title no more listed.');
 
     // Edit organization contact.
-    $organization_node = array(
-      'name[0][value]' => 'Another Example ltd',
-    );
+    // @todo update this values when contact is split into entities.
+    $organization_node = [
+      'name[0][title]' => '',
+      'name[0][given]' => 'Another Example',
+      'name[0][middle]' => '',
+      'name[0][family]' => 'ltd',
+      'name[0][generational]' => '',
+      'name[0][credentials]' => '',
+    ];
     $this->drupalPostForm('crm-core/contact/3/edit', $organization_node, 'Save Organization');
 
     // Assert we were redirected back to the list of contacts.
@@ -212,7 +237,7 @@ class ContactUiTest extends WebTestBase {
 
     // Check listing page.
     $this->drupalGet('crm-core/contact');
-    $this->assertLink('Another Example ltd', 0, 'Updated contact title listed.');
+    $this->assertText('Another Example ltd', 0, 'Updated contact title listed.');
 
     // Delete organization contact.
     $this->drupalPostForm('crm-core/contact/3/delete', array(), t('Delete'));

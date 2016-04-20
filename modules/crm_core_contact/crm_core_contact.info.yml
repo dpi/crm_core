@@ -14,6 +14,7 @@ dependencies:
   # Contrib dependencies
   - field_ui
   - text
+  - name
 
 test_dependencies:
   - name
@@ -22,4 +23,3 @@ test_dependencies:
   # Field dependencies
   # @todo Readd once awaillable and still needed.
 #  - field_group
-#  - name

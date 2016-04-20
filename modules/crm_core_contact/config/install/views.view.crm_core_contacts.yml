@@ -3,6 +3,8 @@ status: true
 dependencies:
   module:
     - crm_core_contact
+    - name
+    - user
 id: crm_core_contact_overview
 label: 'CRM Core Contact overview'
 module: views
@@ -73,12 +75,12 @@ display:
           summary: ''
           description: ''
           columns:
-            name: name
+            name__title: name__title
             type: type
             changed: changed
             operations: operations
           info:
-            name:
+            name__title:
               sortable: true
               default_sort_order: asc
               align: ''
@@ -111,10 +113,10 @@ display:
       row:
         type: fields
       fields:
-        name:
-          id: name
+        name__title:
+          id: name__title
           table: crm_core_contact
-          field: name
+          field: name__title
           relationship: none
           group_type: group
           admin_label: ''
@@ -159,11 +161,19 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: value
-          type: string
+          click_sort_column: family
+          type: name_default
           settings:
-            link_to_entity: true
-          group_column: value
+            format: short_full
+            markup: false
+            output: default
+            multiple: default
+            multiple_delimiter: ', '
+            multiple_and: text
+            multiple_delimiter_precedes_last: never
+            multiple_el_al_min: '3'
+            multiple_el_al_first: '1'
+          group_column: ''
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -361,46 +371,6 @@ display:
           hide_alter_empty: true
           destination: true
       filters:
-        name:
-          id: name
-          table: crm_core_contact
-          field: name
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: contains
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: name_op
-            label: Name
-            description: ''
-            use_operator: false
-            operator: name_op
-            identifier: name
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: crm_core_contact
-          entity_field: name
-          plugin_id: string
         type:
           id: type
           table: crm_core_contact
@@ -442,6 +412,98 @@ display:
           entity_type: crm_core_contact
           entity_field: type
           plugin_id: bundle
+        name__given:
+          id: name__given
+          table: crm_core_contact
+          field: name__given
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: name__given_op
+            label: 'Name (given)'
+            description: ''
+            use_operator: false
+            operator: name__given_op
+            identifier: name__given
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: 'Name (given)'
+            description: ''
+            identifier: name__given
+            optional: true
+            widget: select
+            multiple: true
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: ''
+                operator: contains
+                value: ''
+              2:
+                title: ''
+                operator: contains
+                value: ''
+              3:
+                title: ''
+                operator: contains
+                value: ''
+          entity_type: crm_core_contact
+          entity_field: name
+          plugin_id: string
+        name__family:
+          id: name__family
+          table: crm_core_contact
+          field: name__family
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: name__family_op
+            label: 'Name (family)'
+            description: ''
+            use_operator: false
+            operator: name__family_op
+            identifier: name__family
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          entity_type: crm_core_contact
+          entity_field: name
+          plugin_id: string
       sorts: {  }
       title: Contacts
       header: {  }
@@ -461,6 +523,10 @@ display:
       relationships: {  }
       arguments: {  }
       display_extenders: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
     cache_metadata:
       max-age: 0
       contexts:

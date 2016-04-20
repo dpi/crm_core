@@ -23,6 +23,7 @@ class FieldMatcherTest extends KernelTestBase {
     'text',
     'crm_core_contact',
     'crm_core_match',
+    'name',
     'views',
     'system',
   );
@@ -72,40 +73,80 @@ class FieldMatcherTest extends KernelTestBase {
    * Test the text field.
    */
   public function testName() {
-    $config = array(
-      'value' => array(
-        'operator' => '=',
-        'score' => 42,
-      ),
-    );
+    $config = [
+      'title' => [
+        'score' => 1
+      ],
+      'given' => [
+        'score' => 10
+      ],
+      'middle' => [
+        'score' => 1
+      ],
+      'family' => [
+        'score' => 20
+      ],
+      'generational' => [
+        'score' => 1
+      ],
+      'credentials' => [
+        'score' => 1
+      ],
+    ];
     /** @var Contact $contact_needle */
     $contact_needle = Contact::create(array('type' => 'individual'));
-    $contact_needle->set('name', 'Mr Gimeno Boomer');
-    $contact_needle->save();
+    $contact_needle->set('name', [
+      'title' => 'Mr.',
+      'given' => 'Gimeno',
+      'family' => 'Boomer',
+    ])->save();
     /** @var Contact $contact_match */
     $contact_match = Contact::create(array('type' => 'individual'));
-    $contact_match->set('name', 'Gimeno Boomer, Mr');
-    $contact_match->save();
+    $contact_match->set('name', [
+      'title' => 'Mr.',
+      'given' => 'Gimeno',
+      'family' => 'Boomer',
+    ])->save();
     /** @var Contact $contact_match2 */
     $contact_match2 = Contact::create(array('type' => 'individual'));
-    $contact_match2->set('name', 'Rodrigo Boomer, Mr');
-    $contact_match2->save();
+    $contact_match2->set('name', [
+      'title' => 'Mr.',
+      'given' => 'Rodrigo',
+      'family' => 'Boomer',
+    ])->save();
 
     $config['field'] = $contact_needle->getFieldDefinition('name');
     /* @var \Drupal\crm_core_match\Plugin\crm_core_match\field\FieldHandlerInterface $text */
     $text = $this->pluginManager->createInstance('name', $config);
 
     $ids = $text->match($contact_needle);
-    $this->assertTrue(array_key_exists($contact_match->id(), $ids), 'Text match returns expected match');
-    $this->assertTrue(array_key_exists($contact_match2->id(), $ids), 'Text match returns expected match');
-    $this->assertEqual(42, $ids[$contact_match->id()]['name.value'], 'Got expected match score');
-    $this->assertEqual(21, $ids[$contact_match2->id()]['name.value'], 'Got expected match score');
+    $this->assertTrue(array_key_exists($contact_match->id(), $ids), 'Text match returns expected match.');
+    $this->assertTrue(array_key_exists($contact_match2->id(), $ids), 'Text match returns expected match.');
+    $this->assertEquals(20, $ids[$contact_match->id()]['name.family'], 'Got expected match score.');
+    $this->assertEquals(20, $ids[$contact_match2->id()]['name.family'], 'Got expected match score.');
+
+    $ids = $text->match($contact_needle, 'given');
+    $this->assertTrue(array_key_exists($contact_match->id(), $ids), 'Text match returns expected match.');
+    $this->assertFalse(array_key_exists($contact_match2->id(), $ids), 'Text match does not return wrong match.');
+    $this->assertEquals(10, $ids[$contact_match->id()]['name.given'], 'Got expected match score.');
   }
 
   /**
    * Test the text field.
    */
   public function testText() {
+    FieldStorageConfig::create([
+      'entity_type' => 'crm_core_contact',
+      'type' => 'string',
+      'field_name' => 'contact_text',
+    ])->save();
+    FieldConfig::create([
+      'field_name' => 'contact_text',
+      'entity_type' => 'crm_core_contact',
+      'bundle' => 'individual',
+      'label' => t('Text'),
+      'required' => FALSE,
+    ])->save();
     $config = array(
       'value' => array(
         'operator' => '=',
@@ -114,20 +155,20 @@ class FieldMatcherTest extends KernelTestBase {
     );
     /** @var Contact $contact_needle */
     $contact_needle = Contact::create(array('type' => 'individual'));
-    $contact_needle->set('name', 'Boomer');
+    $contact_needle->set('contact_text', 'Boomer');
     $contact_needle->save();
     /** @var Contact $contact_match */
     $contact_match = Contact::create(array('type' => 'individual'));
-    $contact_match->set('name', 'Boomer');
+    $contact_match->set('contact_text', 'Boomer');
     $contact_match->save();
 
-    $config['field'] = $contact_needle->getFieldDefinition('name');
+    $config['field'] = $contact_needle->getFieldDefinition('contact_text');
     /* @var \Drupal\crm_core_match\Plugin\crm_core_match\field\FieldHandlerInterface $text */
     $text = $this->pluginManager->createInstance('text', $config);
 
     $ids = $text->match($contact_needle);
     $this->assertTrue(array_key_exists($contact_match->id(), $ids), 'Text match returns expected match');
-    $this->assertEqual(42, $ids[$contact_match->id()]['name.value'], 'Got expected match score');
+    $this->assertEqual(42, $ids[$contact_match->id()]['contact_text.value'], 'Got expected match score');
   }
 
   /**
