@@ -12,6 +12,9 @@ dependencies:
   - entity_reference
   - datetime
 
+test_dependencies:
+  - dynamic_entity_reference
+
   # @todo: Readd if needed and availlable.
   # Field dependencies
 #  - entityreference
