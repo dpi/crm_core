@@ -12,6 +12,9 @@ dependencies:
   - entity_reference
   - datetime
 
+  # Contrib dependencies
+  - dynamic_entity_reference
+
 test_dependencies:
   - dynamic_entity_reference
 

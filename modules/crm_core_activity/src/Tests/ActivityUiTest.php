@@ -81,11 +81,13 @@ class ActivityUiTest extends WebTestBase {
     // Create Meeting activity. Ensure it is listed.
     $this->drupalGet('crm-core/activity/add/meeting');
     $this->assertText(t('Format: @date', ['@date' => date('Y-m-d H:i')]));
+    $this->assertText('Entity type');
     $meeting_activity = array(
       'title[0][value]' => 'Pellentesque',
       'activity_date[0][value][date]' => $this->randomDate(),
       'activity_date[0][value][time]' => $this->randomTime(),
       'activity_notes[0][value]' => $this->randomString(),
+      'activity_participants[0][target_type]' => $household->getEntityTypeId(),
       'activity_participants[0][target_id]' => $household->label() . ' (' . $household->id() . ')',
     );
 
@@ -103,6 +105,7 @@ class ActivityUiTest extends WebTestBase {
       'activity_date[0][value][date]' => $this->randomDate(),
       'activity_date[0][value][time]' => $this->randomTime(),
       'activity_notes[0][value]' => $this->randomString(),
+      'activity_participants[0][target_type]' => $household->getEntityTypeId(),
       'activity_participants[0][target_id]' => $household->label() . ' (' . $household->id() . ')',
     );
     $this->drupalPostForm('crm-core/activity/add/phone_call', $phonecall_activity, 'Save Activity');
@@ -149,7 +152,7 @@ class ActivityUiTest extends WebTestBase {
       'activity_participants[0][target_id]' => '',
     );
     $this->drupalPostForm('crm-core/activity/1/edit', $empty_participant, 'Save Activity');
-    $this->assertText('Participants (value 1) field is required.', 'Empty activity participant not allowed.');
+    $this->assertText('Label field is required.', 'Empty activity participant not allowed.');
 
     // Update phone call activity and assert its title changed on the list.
     $phonecall_activity = array(

@@ -289,6 +289,7 @@ function crm_core_contact_merge_contacts_action($selected_contacts, $context) {
       $query = new EntityFieldQuery();
       $activities = $query->entityCondition('entity_type', 'crm_core_activity')
         ->fieldCondition('field_activity_participants', 'target_id', $contact_id)
+        ->fieldCondition('field_activity_participants', 'target_type', 'crm_core_contact')
         ->execute();
       if (is_array($activities) && isset($activities['crm_core_activity'])) {
         foreach (array_keys($activities['crm_core_activity']) as $activity_id) {
@@ -438,6 +439,7 @@ function crm_core_contact_entity_dependencies($entity, $entity_type) {
       $query = new EntityFieldQuery();
       $query->entityCondition('entity_type', 'crm_core_activity');
       $query->fieldCondition('field_activity_participants', 'target_id', $entity->contact_id);
+      $query->fieldCondition('field_activity_participants', 'target_type', 'crm_core_contact');
       $result = $query->execute();
       if (!empty($result['crm_core_activity'])) {
         foreach (array_keys($result['crm_core_activity']) as $activity_id) {

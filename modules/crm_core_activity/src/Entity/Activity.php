@@ -137,10 +137,10 @@ class Activity extends ContentEntityBase implements ActivityInterface {
       ->setDescription(t('The time that the activity was last edited.'))
       ->setRevisionable(TRUE);
 
-    // @todo Check settings.
-    $fields['activity_participants'] = BaseFieldDefinition::create('entity_reference')
+    $fields['activity_participants'] = BaseFieldDefinition::create('dynamic_entity_reference')
       ->setLabel(t('Participants'))
-      ->setSetting('target_type', 'crm_core_contact')
+      ->setSetting('exclude_entity_types', FALSE)
+      ->setSetting('entity_type_ids', ['crm_core_contact'])
       ->setCardinality(-1)
       ->setRequired(TRUE)
       ->setDisplayOptions('view', [
@@ -148,11 +148,11 @@ class Activity extends ContentEntityBase implements ActivityInterface {
         'settings' => [
           'link' => TRUE,
         ],
-        'type' => 'entity_reference_label',
+        'type' => 'dynamic_entity_reference_label',
         'weight' => 0,
       ])
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
+        'type' => 'dynamic_entity_reference_default',
         'settings' => [
           'match_operator' => 'CONTAINS',
         ],

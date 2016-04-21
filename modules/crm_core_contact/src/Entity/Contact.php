@@ -164,6 +164,7 @@ class Contact extends ContentEntityBase implements ContactInterface {
     $query = \Drupal::entityQuery('crm_core_activity');
     $activity_ids = $query
       ->condition('activity_participants.target_id', array_keys($entities), 'IN')
+      ->condition('activity_participants.target_type', 'crm_core_contact')
       ->execute();
     if (empty($activity_ids)) {
       // No related Activities.
