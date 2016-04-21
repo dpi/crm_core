@@ -162,15 +162,6 @@ function crm_core_ui_get_menus() {
 }
 
 /**
- * Implements hook_page_attachments().
- */
-function crm_core_ui_page_attachments(array &$attachments) {
-  if (Url::fromRoute('crm_core.dashboard')->access() && \Drupal::currentUser()->hasPermission('access toolbar')) {
-    $attachments['#attached']['library'][] = 'crm_core_ui/admin';
-  }
-}
-
-/**
  * Helper function to remove links by path from specified menu.
  *
  * @param $conditions
