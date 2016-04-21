@@ -98,6 +98,17 @@ class ActivityUiTest extends WebTestBase {
     $this->drupalPostForm(NULL, $meeting_activity, 'Save Activity');
     $this->assertText('Activity Pellentesque created.', 'No errors after adding new activity.');
 
+    // Test Activity::hasParticipant() method.
+    $activities = \Drupal::entityTypeManager()->getStorage('crm_core_activity')->loadByProperties(['title' => 'Pellentesque']);
+    $meeting_activity = current($activities);
+    $this->assertTrue($meeting_activity->hasParticipant($household), t('Meeting activity has participant @name.', ['@name' => $household->label()]));
+    $new_household = Contact::create(array(
+      'name' => 'Fam. Jones',
+      'type' => 'household',
+    ));
+    $new_household->save();
+    $this->assertFalse($meeting_activity->hasParticipant($new_household), t('Meeting activity does not have participant @name.', ['@name' => $new_household->label()]));
+
     // Create Meeting activity. Ensure it it listed.
     $phonecall_activity = array(
       'title[0][value]' => 'Mollis',

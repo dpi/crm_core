@@ -25,4 +25,15 @@ interface ActivityInterface extends ContentEntityInterface, EntityChangedInterfa
    */
   public function addParticipant(ContactInterface $contact);
 
+  /**
+   * Check if participant exists in the activity.
+   *
+   * @param \Drupal\crm_core_contact\ContactInterface $contact
+   *   The contact to check in activity participant.
+   *
+   * @return bool
+   *   Returns TRUE if activity has a given contact/participant.
+   */
+  public function hasParticipant(ContactInterface $contact);
+
 }

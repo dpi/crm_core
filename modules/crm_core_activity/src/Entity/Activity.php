@@ -234,4 +234,17 @@ class Activity extends ContentEntityBase implements ActivityInterface {
   public function getChangedTime() {
     return $this->changed;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasParticipant(ContactInterface $contact) {
+    foreach ($this->activity_participants as $key => $participant) {
+      if ($participant->target_id == $contact->id()) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
 }
