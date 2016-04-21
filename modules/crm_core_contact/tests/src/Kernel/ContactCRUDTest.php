@@ -97,6 +97,13 @@ class ContactCRUDTest extends KernelTestBase {
     $contact_one = Contact::create(array('type' => $type->type));
     $this->assertEqual(SAVED_NEW, $contact_one->save(), 'Contact saved.');
 
+    // Assert default labels.
+    $this->assertEquals('Nameless #' . $contact_one->id(), $contact_one->label());
+    $contact_one->name->given = 'First';
+    $contact_one->name->family = 'Last';
+    $contact_one->save();
+    $this->assertEquals('First Last', $contact_one->label());
+
     // Load.
     $contact_load = Contact::load($contact->id());
     $uuid = $contact_load->uuid();

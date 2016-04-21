@@ -257,9 +257,11 @@ class Contact extends ContentEntityBase implements ContactInterface {
    * {@inheritdoc}
    */
   public function label() {
-    $name_values = $this->get('name')->first()->getValue();
-    $label = trim($name_values['given'] . ' ' . $name_values['family']);
-    if (empty($label)) {
+    $label = '';
+    if ($item = $this->get('name')->first()) {
+      $label = "$item->given $item->family";
+    }
+    if (empty(trim($label))) {
       $label = t('Nameless #@id', ['@id' => $this->id()]);
     }
     \Drupal::moduleHandler()->alter('crm_core_contact_label', $label, $entity);
