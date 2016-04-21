@@ -12,4 +12,4 @@ crm_core.overview:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
     _title: 'CRM Core'
   requirements:
-    _permission: 'view crm overview'
+    _custom_access: '\Drupal\crm_core\Access\CRMCoreAccess::access'

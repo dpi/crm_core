@@ -49,7 +49,6 @@ class ActivityUiTest extends WebTestBase {
     // Create and login user. User should be able to create contacts and
     // activities.
     $user = $this->drupalCreateUser(array(
-      'view crm overview',
       'administer crm_core_contact entities',
       'view any crm_core_contact entity',
       'administer crm_core_activity entities',

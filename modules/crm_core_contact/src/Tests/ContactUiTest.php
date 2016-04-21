@@ -50,17 +50,38 @@ class ContactUiTest extends WebTestBase {
    *   easily but back in place.
    */
   public function testContactOperations() {
-    // Create user and login.
-    $user = $this->drupalCreateUser(array(
-      'create crm_core_contact entities of bundle household',
-      'create crm_core_contact entities of bundle organization',
+    $this->drupalGet('crm-core');
+    $this->assertResponse(403);
+
+    $user = $this->drupalCreateUser([
       'view any crm_core_contact entity',
-      'view crm overview',
-      'view any crm_core_activity entity',
-    ));
+    ]);
     $this->drupalLogin($user);
 
     $this->drupalGet('crm-core');
+    $this->assertLink('CRM Contacts');
+    $this->assertNoLink('CRM Activities');
+
+    $user = $this->drupalCreateUser([
+      'view any crm_core_activity entity',
+    ]);
+    $this->drupalLogin($user);
+
+    $this->drupalGet('crm-core');
+    $this->assertNoLink('CRM Contacts');
+    $this->assertLink('CRM Activities');
+
+    // Create user and login.
+    $user = $this->drupalCreateUser([
+      'create crm_core_contact entities of bundle household',
+      'create crm_core_contact entities of bundle organization',
+      'view any crm_core_contact entity',
+      'view any crm_core_activity entity',
+    ]);
+    $this->drupalLogin($user);
+
+    $this->drupalGet('crm-core');
+
     $this->assertTitle(t('CRM Core | Drupal'));
 
     $this->assertLink(t('CRM Activities'));
