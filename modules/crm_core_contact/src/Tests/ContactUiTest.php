@@ -267,6 +267,14 @@ class ContactUiTest extends WebTestBase {
 
     // Assert that there are no contacts left.
     $this->assertText(t('There are no contacts available.'), 'No contacts available after fresh installation.');
+
+    // Create a contact with no label.
+    $contact = Contact::create(['type' => 'individual']);
+    $contact->save();
+
+    // Go to overview page and assert there is a default label displayed.
+    $this->drupalGet('crm-core/contact');
+    $this->assertText('Nameless #' . $contact->id());
   }
 
   /**
