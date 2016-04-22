@@ -22,6 +22,13 @@ class ContactTypeForm extends EntityForm {
 
   /**
    * {@inheritdoc}
+   *
+   * @var \Drupal\crm_core_contact\ContactTypeInterface
+   */
+  protected $entity;
+
+  /**
+   * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
@@ -58,9 +65,11 @@ class ContactTypeForm extends EntityForm {
 
     // Primary fields section.
     $form['primary_fields_container'] = array(
-      '#type' => 'fieldset',
+      '#type' => 'details',
       '#title' => $this->t('Primary Fields'),
       '#description' => $this->t('Primary fields are used to tell other modules what fields to use for common communications tasks such as sending an email, addressing an envelope, etc. Use the fields below to indicate the primary fields for this contact type.'),
+      '#open' => TRUE,
+      '#tree' => TRUE,
     );
 
     // @todo Move primary fields array to some hook. This Would allow extend this
@@ -69,10 +78,10 @@ class ContactTypeForm extends EntityForm {
 //    $primary_fields = variable_get('crm_core_contact_default_primary_fields', $default_primary_fields);
     $primary_fields = $default_primary_fields;
     $options = array();
-    if (isset($type->type)) {
+    if (!$this->entity->isNew()) {
       /* @var \Drupal\Core\Field\FieldDefinitionInterface[] $instances */
-      $instances = \Drupal::service('entity_field.manager')->getFieldDefinitions('crm_core_contact', $type->type);
-      $instances = isset($instances[$type->type]) ? $instances[$type->type] : array();
+      $instances = \Drupal::service('entity_field.manager')
+        ->getFieldDefinitions('crm_core_contact', $this->entity->id());
       foreach ($instances as $instance) {
         $options[$instance->getName()] = $instance->getLabel();
       }
@@ -81,9 +90,9 @@ class ContactTypeForm extends EntityForm {
       $form['primary_fields_container'][$primary_field] = array(
         '#type' => 'select',
         '#title' => $this->t('Primary @field field', array('@field' => $primary_field)),
-        '#default_value' => empty($type->primary_fields[$primary_field]) ? '' : $type->primary_fields[$primary_field],
+        '#default_value' => $this->entity->getPrimaryField($primary_field),
         '#empty_value' => '',
-        '#empty_option' => $this->t('--Please Select--'),
+        '#empty_option' => $this->t('- Select -'),
         '#options' => $options,
       );
     }
@@ -119,6 +128,11 @@ class ContactTypeForm extends EntityForm {
    */
   public function save(array $form, FormStateInterface $form_state) {
     $type = $this->entity;
+
+    $default_primary_fields = ['email', 'address', 'phone'];
+    foreach ($default_primary_fields as $primary_field) {
+      $type->primary_fields[$primary_field] = $form_state->getValue(['primary_fields_container', $primary_field]);
+    }
 
     $status = $type->save();
 

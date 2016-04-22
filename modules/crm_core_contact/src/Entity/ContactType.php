@@ -183,4 +183,11 @@ class ContactType extends ConfigEntityBundleBase implements ContactTypeInterface
     return $this;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getPrimaryField($field) {
+    return isset($this->primary_fields[$field]) ? $this->primary_fields[$field] : NULL;
+  }
+
 }

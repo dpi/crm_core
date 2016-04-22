@@ -248,9 +248,9 @@ class Contact extends ContentEntityBase implements ContactInterface {
    *   If the configured primary field does not exist.
    */
   public function getPrimaryField($field) {
-    $type = $this->get('type')->entity;
-    $name = empty($type->primary_fields[$field]) ? '' : $type->primary_fields[$field];
-    return $this->get($name);
+    /** @var \Drupal\crm_core_contact\ContactTypeInterface $contact_type */
+    $contact_type = $this->get('type')->entity;
+    return $this->get($contact_type->getPrimaryField($field));
   }
 
   /**
